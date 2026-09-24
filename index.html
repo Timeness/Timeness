@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RepoViewer | GitHub Repo Explorer</title>
+<title>RepoViewer Pro | Modern GitHub Repo Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -73,7 +73,6 @@ body {
   overflow: hidden;
 }
 
-/* Animated mesh background */
 body::before {
   content: "";
   position: fixed;
@@ -94,7 +93,6 @@ body::before {
   z-index: 1;
 }
 
-/* ===== Header ===== */
 .topbar {
   height: 70px;
   background: var(--surface-glass);
@@ -214,14 +212,12 @@ body::before {
   border: 1px solid var(--border);
 }
 
-/* ===== Workspace ===== */
 .workspace {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-/* ===== Sidebar ===== */
 .sidebar {
   width: 320px;
   min-width: 260px;
@@ -391,7 +387,6 @@ body::before {
   box-shadow: 0 0 8px currentColor;
 }
 
-/* ===== Preview ===== */
 .preview {
   flex: 1;
   overflow-y: auto;
@@ -665,7 +660,6 @@ body::before {
   padding: 0;
 }
 
-/* ===== HTML Live Editor ===== */
 .html-live-editor {
   display: flex;
   flex-direction: column;
@@ -684,6 +678,7 @@ body::before {
   background: var(--surface-raised);
   border-bottom: 1px solid var(--border);
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .html-live-toolbar .left-actions,
@@ -820,7 +815,6 @@ body::before {
   border-color: rgba(251,191,36,0.2);
 }
 
-/* ===== Toast ===== */
 .toast-container {
   position: fixed;
   top: 20px;
@@ -856,13 +850,11 @@ body::before {
   animation: slideOut 0.3s ease forwards;
 }
 
-/* ===== Scrollbar ===== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #1e2235; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #2a2f47; }
 
-/* ===== Animations ===== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -883,7 +875,6 @@ body::before {
   50% { opacity: 0.5; }
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 900px) {
   .workspace { flex-direction: column; }
   .sidebar { width: 100%; height: 38%; min-height: 200px; border-right: none; border-bottom: 1px solid var(--border); }
@@ -900,7 +891,6 @@ body::before {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
-/* ===== Loading shimmer ===== */
 .shimmer {
   background: linear-gradient(90deg, var(--surface) 25%, var(--surface-raised) 50%, var(--surface) 75%);
   background-size: 200% 100%;
@@ -911,41 +901,6 @@ body::before {
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
-}
-
-/* ===== Context menu ===== */
-.context-menu {
-  position: fixed;
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 6px;
-  min-width: 180px;
-  box-shadow: var(--shadow);
-  z-index: 10000;
-  animation: fadeIn 0.15s ease;
-}
-
-.context-menu-item {
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-  color: var(--text-primary);
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.context-menu-item:hover {
-  background: rgba(255,255,255,0.05);
-}
-
-.context-menu-sep {
-  height: 1px;
-  background: var(--border);
-  margin: 6px 0;
 }
 </style>
 </head>
@@ -974,7 +929,7 @@ body::before {
         </div>
       </div>
       <div class="sidebar-search">
-        <input type="text" id="file-filter" placeholder="🔍 Filter files...">
+        <input type="text" id="file-filter" placeholder="Filter files... (Ctrl+K)">
       </div>
       <div class="file-list" id="file-list">
         <div class="empty-state" style="opacity:.7;">
@@ -1282,7 +1237,7 @@ async function openFile(item) {
           <div class="tabs">
             <button class="tab-btn active" onclick="switchHtmlTab(event,'source')">Source</button>
             <button class="tab-btn" onclick="switchHtmlTab(event,'preview')">Preview</button>
-            <button class="tab-btn" onclick="switchHtmlTab(event,'live')">🔥 Live Editor</button>
+            <button class="tab-btn" onclick="switchHtmlTab(event,'live')">Live Editor</button>
           </div>
           <div class="tab-body" id="html-source"><pre><code class="language-markup">${safeText}</code></pre></div>
           <div class="tab-body" id="html-preview" style="display:none;padding:0;">
@@ -1291,7 +1246,6 @@ async function openFile(item) {
           <div class="tab-body" id="html-live" style="display:none;padding:0;"></div>
         `;
         window.__htmlPreviewText = text;
-        // Auto-load preview in sandboxed iframe
         setTimeout(() => {
           const frame = document.getElementById('html-preview-frame');
           if (frame) {
@@ -1350,12 +1304,12 @@ function renderHtmlLiveEditor(container, initialCode) {
       <div class="html-live-toolbar">
         <div class="left-actions">
           <label>HTML Live Editor</label>
-          <span class="perm-badge" id="perm-sandbox" title="Sandboxed iframe with allow-scripts">🛡️ Sandboxed</span>
+          <span class="perm-badge" id="perm-sandbox" title="Sandboxed iframe with allow-scripts">SandBoxed</span>
         </div>
         <div class="right-actions">
-          <button onclick="toggleHtmlLiveSplit()" id="btn-split" title="Toggle split view">⇄ Split</button>
-          <button onclick="refreshHtmlLivePreview()" class="primary">▶ Run</button>
-          <button onclick="requestHtmlPermissions()" title="Request permissions (geolocation, camera, mic, notifications)">🔐 Permissions</button>
+          <button onclick="toggleHtmlLiveSplit()" id="btn-split" title="Toggle split view">Split</button>
+          <button onclick="refreshHtmlLivePreview()" class="primary">Run</button>
+          <button onclick="requestHtmlPermissions()" title="Request permissions (geolocation, camera, mic, notifications)">Permissions</button>
         </div>
       </div>
       <div class="html-live-panes ${state.htmlLiveSplit ? 'split' : ''}" id="html-live-panes">
@@ -1398,7 +1352,7 @@ window.toggleHtmlLiveSplit = function() {
   const panes = document.getElementById('html-live-panes');
   if (panes) panes.classList.toggle('split', state.htmlLiveSplit);
   const btn = document.getElementById('btn-split');
-  if (btn) btn.textContent = state.htmlLiveSplit ? '⇄ Split' : '⛶ Full';
+  if (btn) btn.textContent = state.htmlLiveSplit ? 'Split' : 'Full';
 };
 
 window.refreshHtmlLivePreview = function() {
@@ -1409,41 +1363,35 @@ window.refreshHtmlLivePreview = function() {
 
   if (overlay) overlay.style.display = 'none';
 
-  // Inject permission bridge script before running user code
-  const bridge = \`
-    <script>
-    (function(){
-      window.__repoViewerPermissions = {};
-      window.requestRepoPermission = function(type) {
-        return parent.postMessage({type:'REQ_PERM', perm:type}, '*');
-      };
-      // Proxy geolocation
-      if (navigator.geolocation) {
-        const orig = navigator.geolocation.getCurrentPosition;
-        navigator.geolocation.getCurrentPosition = function(cb, err, opts) {
-          parent.postMessage({type:'REQ_PERM', perm:'geolocation'}, '*');
-          return orig.call(navigator.geolocation, cb, err, opts);
-        };
-      }
-      // Proxy notifications
-      const origNotify = window.Notification?.requestPermission;
-      if (origNotify) {
-        window.Notification.requestPermission = function() {
-          parent.postMessage({type:'REQ_PERM', perm:'notifications'}, '*');
-          return origNotify.call(window.Notification);
-        };
-      }
-      // Proxy mediaDevices
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const origGUM = navigator.mediaDevices.getUserMedia;
-        navigator.mediaDevices.getUserMedia = function(c) {
-          parent.postMessage({type:'REQ_PERM', perm:'camera,microphone'}, '*');
-          return origGUM.call(navigator.mediaDevices, c);
-        };
-      }
-    })();
-    <\/script>
-  \`;
+  const bridge = "<script>" +
+    "(function(){" +
+      "window.__repoViewerPermissions = {};" +
+      "window.requestRepoPermission = function(type) {" +
+        "return parent.postMessage({type:'REQ_PERM', perm:type}, '*');" +
+      "};" +
+      "if (navigator.geolocation) {" +
+        "const orig = navigator.geolocation.getCurrentPosition;" +
+        "navigator.geolocation.getCurrentPosition = function(cb, err, opts) {" +
+          "parent.postMessage({type:'REQ_PERM', perm:'geolocation'}, '*');" +
+          "return orig.call(navigator.geolocation, cb, err, opts);" +
+        "};" +
+      "}" +
+      "const origNotify = window.Notification?.requestPermission;" +
+      "if (origNotify) {" +
+        "window.Notification.requestPermission = function() {" +
+          "parent.postMessage({type:'REQ_PERM', perm:'notifications'}, '*');" +
+          "return origNotify.call(window.Notification);" +
+        "};" +
+      "}" +
+      "if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {" +
+        "const origGUM = navigator.mediaDevices.getUserMedia;" +
+        "navigator.mediaDevices.getUserMedia = function(c) {" +
+          "parent.postMessage({type:'REQ_PERM', perm:'camera,microphone'}, '*');" +
+          "return origGUM.call(navigator.mediaDevices, c);" +
+        "};" +
+      "}" +
+    "})();" +
+  "<\/script>";
 
   const finalHtml = code.includes('<html') ? code : bridge + code;
   const blob = new Blob([finalHtml], {type: 'text/html'});
@@ -1481,7 +1429,6 @@ window.openHtmlLiveEditorFromFile = async function(url) {
     const res = await fetch(url);
     const text = await res.text();
     state.htmlLiveText = text;
-    // Switch to live tab if exists
     const liveDiv = document.getElementById('html-live');
     if (liveDiv) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1498,12 +1445,10 @@ window.openHtmlLiveEditorFromFile = async function(url) {
   }
 };
 
-// Listen for permission requests from iframe
 window.addEventListener('message', async (e) => {
   if (e.data && e.data.type === 'REQ_PERM') {
     const perm = e.data.perm;
     showToast('Page requested: ' + perm, 'info');
-    // Attempt to trigger permission prompt by calling the actual API
     if (perm.includes('geolocation')) {
       navigator.geolocation.getCurrentPosition(()=>{}, ()=>{});
     }
@@ -1562,7 +1507,6 @@ els.loadBtn.addEventListener('click', () => {
 
 els.repoUrl.addEventListener('keydown', e => { if (e.key==='Enter') els.loadBtn.click(); });
 
-// Drag & drop support
 document.body.addEventListener('dragover', e => { e.preventDefault(); });
 document.body.addEventListener('drop', e => {
   e.preventDefault();
@@ -1573,7 +1517,6 @@ document.body.addEventListener('drop', e => {
   }
 });
 
-// Keyboard shortcuts
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault();
@@ -1586,7 +1529,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Load default on first open if URL present
 if (els.repoUrl.value.trim()) {
   setTimeout(() => els.loadBtn.click(), 300);
 }
