@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RepoViewer Pro | Modern GitHub Repo Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
+
+<style>
+:root {
+  --bg-deep: #03040a;
+  --bg: #0b0d14;
+  --surface: #121420;
+  --surface-raised: #181b2b;
+  --surface-glass: rgba(18, 20, 36, 0.72);
+  --border: rgba(148, 163, 184, 0.1);
+  --border-hover: rgba(148, 163, 184, 0.2);
+  --text-primary: #f0f4f8;
+  --text-secondary: #8896a8;
+  --text-tertiary: #556272;
+  --accent: #60a5fa;
+  --accent-glow: rgba(96, 165, 250, 0.35);
+  --accent-hover: #7db8fc;
+  --accent-weak: rgba(96, 165, 250, 0.08);
+  --success: #34d399;
+  --danger: #fb7185;
+  --warning: #fbbf24;
+  --purple: #a78bfa;
+  --pink: #f472b6;
+  --cyan: #22d3ee;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --font-ui: "Inter", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+  --shadow: 0 8px 32px rgba(0,0,0,0.35);
+  --shadow-glow: 0 0 40px rgba(96, 165, 250, 0.08);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Animated mesh background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(96,165,250,0.07), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(167,139,250,0.05), transparent),
+    radial-gradient(ellipse 50% 60% at 50% 90%, rgba(34,211,238,0.04), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Header ===== */
+.topbar {
+  height: 70px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 20px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.3;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  letter-spacing: -0.5px;
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.brand-icon svg { width: 20px; height: 20px; fill: #fff; }
+
+.search-box {
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  gap: 10px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.search-box:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-weak), 0 0 30px rgba(96,165,250,0.1);
+}
+
+.search-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-box input::placeholder { color: var(--text-tertiary); }
+
+.search-box button {
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  color: #fff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+}
+
+.search-box button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+
+.search-box button:hover::before { transform: translateX(100%); }
+.search-box button:hover { transform: translateY(-1px); box-shadow: 0 8px 25px var(--accent-glow); }
+.search-box button:active { transform: translateY(1px); }
+
+.repo-meta {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  background: var(--surface-raised);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+/* ===== Workspace ===== */
+.workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 320px;
+  min-width: 260px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.breadcrumb-wrap {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(3,4,10,0.3);
+}
+
+.breadcrumb {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.breadcrumb a {
+  color: var(--accent);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.breadcrumb a:hover {
+  background: var(--accent-weak);
+  text-decoration: none;
+}
+
+.breadcrumb .sep {
+  opacity: 0.3;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.sidebar-search {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-search input {
+  width: 100%;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.sidebar-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-weak);
+}
+
+.sidebar-search input::placeholder { color: var(--text-tertiary); }
+
+.file-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-primary);
+  text-decoration: none;
+  margin-bottom: 3px;
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.file-item::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 3px 3px 0;
+  opacity: 0;
+  transform: scaleY(0.6);
+  transition: var(--transition);
+}
+
+.file-item:hover {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--border-hover);
+  transform: translateX(2px);
+}
+
+.file-item.active {
+  background: var(--accent-weak);
+  border-color: rgba(96,165,250,0.2);
+}
+
+.file-item.active::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.file-item .icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-item .icon svg { width: 18px; height: 18px; }
+
+.file-item .name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.file-item .size {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.rate-limit {
+  padding: 10px 16px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+  background: rgba(3,4,10,0.4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+}
+
+.rate-limit .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* ===== Preview ===== */
+.preview {
+  flex: 1;
+  overflow-y: auto;
+  background: transparent;
+  padding: 24px 28px;
+  position: relative;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  text-align: center;
+  gap: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.empty-state .hero-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(96,165,250,0.2);
+  margin-bottom: 10px;
+}
+
+.empty-state .hero-icon svg { width: 50px; height: 50px; fill: #fff; }
+
+.empty-state h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.empty-state p {
+  margin: 0;
+  max-width: 360px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  animation: fadeIn 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-title {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.2px;
+}
+
+.preview-title .icon svg { width: 22px; height: 22px; }
+
+.preview-meta {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+  font-family: var(--font-mono);
+}
+
+.preview-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-actions button,
+.tab-btn {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.preview-actions button:hover,
+.tab-btn:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.preview-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  animation: fadeIn 0.35s ease;
+  box-shadow: var(--shadow);
+}
+
+.preview-content.image,
+.preview-content.audio,
+.preview-content.video {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-shadow: none;
+}
+
+.preview-content.image img {
+  max-width: 100%;
+  max-height: 72vh;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  transition: var(--transition);
+}
+
+.preview-content.image img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+}
+
+.preview-content.audio audio {
+  width: 100%;
+  max-width: 560px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+.preview-content.video video {
+  width: 100%;
+  max-width: 800px;
+  max-height: 72vh;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.preview-content.pdf iframe,
+.preview-content.html iframe {
+  width: 100%;
+  height: 72vh;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.preview-content.code pre,
+.preview-content.text pre {
+  margin: 0;
+  padding: 20px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  max-height: 74vh;
+  overflow-y: auto;
+}
+
+.preview-content.text pre {
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.preview-content.markdown {
+  padding: 32px 36px;
+  line-height: 1.75;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.preview-content.markdown h1,
+.preview-content.markdown h2,
+.preview-content.markdown h3 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5em;
+  margin-top: 1.6em;
+  color: var(--text-primary);
+}
+
+.preview-content.markdown img {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.preview-content.markdown code {
+  background: var(--bg);
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: var(--accent);
+}
+
+.preview-content.markdown pre code {
+  display: block;
+  padding: 16px;
+  overflow-x: auto;
+  color: #abb2bf;
+}
+
+.preview-content.binary {
+  padding: 60px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.preview-content.binary .big-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.preview-content.binary a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+  padding: 10px 24px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin-top: 16px;
+  transition: var(--transition);
+}
+
+.preview-content.binary a:hover {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.tab-body {
+  padding: 0;
+}
+
+/* ===== HTML Live Editor ===== */
+.html-live-editor {
+  display: flex;
+  flex-direction: column;
+  height: 72vh;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.html-live-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+  gap: 10px;
+}
+
+.html-live-toolbar .left-actions,
+.html-live-toolbar .right-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.html-live-toolbar label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.html-live-toolbar button {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 6px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.html-live-toolbar button:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--border-hover);
+}
+
+.html-live-toolbar button.primary {
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-color: transparent;
+  color: #fff;
+}
+
+.html-live-toolbar button.primary:hover {
+  box-shadow: 0 4px 15px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.html-live-panes {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.html-live-panes.split {
+  flex-direction: row;
+}
+
+.html-live-panes.split .pane-code,
+.html-live-panes.split .pane-preview {
+  flex: 1;
+  width: 50%;
+}
+
+.html-live-panes:not(.split) .pane-code { display: none; }
+.html-live-panes:not(.split) .pane-preview { flex: 1; width: 100%; }
+
+.pane-code {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+}
+
+.pane-code textarea {
+  flex: 1;
+  width: 100%;
+  background: var(--bg);
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  padding: 16px;
+  resize: none;
+  outline: none;
+}
+
+.pane-code textarea::placeholder { color: var(--text-tertiary); }
+
+.pane-preview {
+  position: relative;
+  background: #fff;
+}
+
+.pane-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+.pane-preview .preview-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text-secondary);
+  flex-direction: column;
+  gap: 12px;
+}
+
+.perm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(52,211,153,0.1);
+  color: var(--success);
+  border: 1px solid rgba(52,211,153,0.2);
+}
+
+.perm-badge.denied {
+  background: rgba(251,113,133,0.1);
+  color: var(--danger);
+  border-color: rgba(251,113,133,0.2);
+}
+
+.perm-badge.warn {
+  background: rgba(251,191,36,0.1);
+  color: var(--warning);
+  border-color: rgba(251,191,36,0.2);
+}
+
+/* ===== Toast ===== */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 260px;
+  backdrop-filter: blur(10px);
+}
+
+.toast.success { border-left: 3px solid var(--success); }
+.toast.error { border-left: 3px solid var(--danger); }
+.toast.info { border-left: 3px solid var(--accent); }
+
+.toast.fade-out {
+  animation: slideOut 0.3s ease forwards;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1e2235; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2a2f47; }
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(30px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .workspace { flex-direction: column; }
+  .sidebar { width: 100%; height: 38%; min-height: 200px; border-right: none; border-bottom: 1px solid var(--border); }
+  .preview { padding: 16px; }
+  .topbar { flex-wrap: wrap; height: auto; padding: 14px; gap: 12px; }
+  .search-box { max-width: 100%; width: 100%; order: 3; }
+  .repo-meta { margin-left: 0; order: 2; }
+  .html-live-panes.split { flex-direction: column; }
+  .html-live-panes.split .pane-code,
+  .html-live-panes.split .pane-preview { width: 100%; height: 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ===== Loading shimmer ===== */
+.shimmer {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-raised) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== Context menu ===== */
+.context-menu {
+  position: fixed;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  min-width: 180px;
+  box-shadow: var(--shadow);
+  z-index: 10000;
+  animation: fadeIn 0.15s ease;
+}
+
+.context-menu-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.context-menu-item:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.context-menu-sep {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.215 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.28-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </div>
+      <span>RepoViewer Pro</span>
+    </div>
+    <div class="search-box">
+      <input type="text" id="repo-url" placeholder="https://github.com/user/repo" value="https://github.com/Timeness/Genis">
+      <button id="load-btn">Load Repo</button>
+    </div>
+    <div class="repo-meta" id="repo-meta">Ready</div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="breadcrumb-wrap">
+        <div class="breadcrumb" id="breadcrumb">
+          <span style="opacity:.5;">Enter a repo URL to browse</span>
+        </div>
+      </div>
+      <div class="sidebar-search">
+        <input type="text" id="file-filter" placeholder="🔍 Filter files...">
+      </div>
+      <div class="file-list" id="file-list">
+        <div class="empty-state" style="opacity:.7;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
+          <p>No repo loaded yet</p>
+        </div>
+      </div>
+      <div class="rate-limit" id="rate-limit">
+        <div class="dot"></div>
+        <span>Ready to fetch</span>
+      </div>
+    </aside>
+
+    <main class="preview" id="preview">
+      <div class="empty-state">
+        <div class="hero-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z"/></svg>
+        </div>
+        <h2>Preview Files Instantly</h2>
+        <p>Paste any public GitHub repo link, browse the file tree, and click any file to preview images, HTML, audio, code, markdown, and more. Use the HTML Live Editor to paste and run HTML/JS instantly.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+/* ===================== ICONS ===================== */
+const ICONS = {
+  folder: `<svg viewBox="0 0 24 24" fill="#60a5fa"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg>`,
+  file:   `<svg viewBox="0 0 24 24" fill="#8896a8"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  image:  `<svg viewBox="0 0 24 24" fill="#34d399"><path d="M4 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4zm0 16v-6l4-4 4 4 6-6 2 2v10H4z"/></svg>`,
+  audio:  `<svg viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`,
+  video:  `<svg viewBox="0 0 24 24" fill="#f472b6"><path d="M8 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V6zM2 8a2 2 0 0 1 2-2v12a2 2 0 0 1-2-2V8zm17.5 4l-5 3v-6l5 3z"/></svg>`,
+  code:   `<svg viewBox="0 0 24 24" fill="#22d3ee"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>`,
+  text:   `<svg viewBox="0 0 24 24" fill="#8896a8"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4zm2 0v12h12V8h-6V4H6z"/></svg>`,
+  binary: `<svg viewBox="0 0 24 24" fill="#fbbf24"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  pdf:    `<svg viewBox="0 0 24 24" fill="#fb7185"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  html:   `<svg viewBox="0 0 24 24" fill="#f97316"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  markdown:`<svg viewBox="0 0 24 24" fill="#22d3ee"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+};
+
+/* ===================== STATE ===================== */
+const state = {
+  owner: null,
+  repo: null,
+  currentPath: '',
+  cache: new Map(),
+  activeFile: null,
+  allItems: [],
+  htmlLiveText: '',
+  htmlLiveSplit: true,
+};
+
+const els = {
+  repoUrl: document.getElementById('repo-url'),
+  loadBtn: document.getElementById('load-btn'),
+  fileList: document.getElementById('file-list'),
+  breadcrumb: document.getElementById('breadcrumb'),
+  preview: document.getElementById('preview'),
+  repoMeta: document.getElementById('repo-meta'),
+  rateLimit: document.getElementById('rate-limit'),
+  fileFilter: document.getElementById('file-filter'),
+  toastContainer: document.getElementById('toast-container'),
+};
+
+/* ===================== UTILS ===================== */
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function formatBytes(bytes) {
+  if (!bytes || bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B','KB','MB','GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k,i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function parseGitHubUrl(url) {
+  try {
+    const u = new URL(url.trim());
+    if (!u.hostname.endsWith('github.com')) return null;
+    const parts = u.pathname.split('/').filter(Boolean);
+    if (parts.length < 2) return null;
+    return { owner: parts[0], repo: parts[1].replace(/\.git$/, '').replace(/\/$/, '') };
+  } catch { return null; }
+}
+
+function showToast(message, type='info') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  const icon = type==='success' ? '✓' : type==='error' ? '✕' : 'ℹ';
+  toast.innerHTML = `<span style="font-size:16px;">${icon}</span><span>${escapeHtml(message)}</span>`;
+  els.toastContainer.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('fade-out');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+/* ===================== FILE TYPE DETECTION ===================== */
+function getFileCategory(name) {
+  const lower = name.toLowerCase();
+  const ext = lower.includes('.') ? lower.split('.').pop() : '';
+
+  const noExtNames = ['dockerfile','makefile','license','readme','changelog','authors','copying','gemfile','rakefile','gemfile.lock'];
+  const hasNoRealExt = !ext || noExtNames.some(n => lower === n || lower.startsWith(n+'.'));
+
+  if (hasNoRealExt) {
+    if (lower === 'license' || lower === 'readme' || lower === 'changelog' || lower === 'copying' || lower === 'authors')
+      return { type: 'text', icon: 'text', lang: 'text' };
+    return { type: 'code', icon: 'code', lang: 'text' };
+  }
+
+  const imageExts = ['png','jpg','jpeg','gif','bmp','svg','webp','ico','avif'];
+  const audioExts = ['mp3','wav','ogg','m4a','flac','aac','wma'];
+  const videoExts = ['mp4','webm','mov','mkv','avi','flv'];
+  const webExts   = ['html','htm'];
+  const mdExts    = ['md','markdown'];
+  const codeExts  = ['js','jsx','ts','tsx','py','java','cpp','c','h','hpp','cs','go','rs','rb','php','css','scss','sass','sql','sh','bash','ps1','json','xml','yaml','yml','ini','conf','cfg','toml','vue','svelte','swift','kt','dart','lua','r','pl','groovy'];
+  const textExts  = ['txt','log','csv','env','gitignore','dockerignore','editorconfig','npmrc','babelrc','prettierrc','eslintrc'];
+
+  if (imageExts.includes(ext)) return { type: 'image', icon: 'image', lang: null };
+  if (audioExts.includes(ext)) return { type: 'audio', icon: 'audio', lang: null };
+  if (videoExts.includes(ext)) return { type: 'video', icon: 'video', lang: null };
+  if (webExts.includes(ext))   return { type: 'html',  icon: 'html',  lang: 'markup' };
+  if (mdExts.includes(ext))    return { type: 'markdown', icon: 'markdown', lang: 'markdown' };
+  if (codeExts.includes(ext))  return { type: 'code',  icon: 'code',  lang: ext };
+  if (textExts.includes(ext))  return { type: 'text',  icon: 'text',  lang: 'text' };
+  if (ext === 'pdf')           return { type: 'pdf',   icon: 'pdf',   lang: null };
+
+  return { type: 'binary', icon: 'binary', lang: null };
+}
+
+function mapPrismLang(ext) {
+  const map = {
+    js: 'javascript', jsx: 'javascript', ts: 'typescript', tsx: 'typescript',
+    py: 'python', java: 'java', cpp: 'cpp', c: 'c', h: 'c', hpp: 'cpp',
+    cs: 'csharp', go: 'go', rs: 'rust', rb: 'ruby', php: 'php',
+    css: 'css', scss: 'scss', sass: 'sass', sql: 'sql',
+    sh: 'bash', bash: 'bash', ps1: 'powershell', json: 'json',
+    xml: 'xml', yaml: 'yaml', yml: 'yaml', ini: 'ini',
+    conf: 'ini', cfg: 'ini', toml: 'toml', vue: 'markup',
+    svelte: 'markup', swift: 'swift', kt: 'kotlin', dart: 'dart',
+    lua: 'lua', r: 'r', pl: 'perl', groovy: 'groovy',
+    html: 'markup', htm: 'markup', md: 'markdown', markdown: 'markdown',
+    text: 'text', txt: 'text', log: 'text', csv: 'text',
+  };
+  return map[ext] || ext || 'text';
+}
+
+/* ===================== API ===================== */
+async function fetchDirectory(path) {
+  const key = `${state.owner}/${state.repo}/${path || 'root'}`;
+  if (state.cache.has(key)) return state.cache.get(key);
+
+  const api = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}`;
+  const res = await fetch(api);
+
+  const remaining = res.headers.get('x-ratelimit-remaining');
+  const limit = res.headers.get('x-ratelimit-limit');
+  if (remaining) {
+    const low = parseInt(remaining) < 10;
+    els.rateLimit.innerHTML = `<div class="dot" style="background:${low?'var(--danger)':'var(--success)'};box-shadow:0 0 8px currentColor;"></div><span>API: ${remaining}/${limit} left</span>`;
+  }
+
+  if (res.status === 403) {
+    const body = await res.json().catch(()=>({}));
+    if (body.message && body.message.includes('rate limit')) {
+      const reset = res.headers.get('x-ratelimit-reset');
+      const time = reset ? new Date(parseInt(reset)*1000).toLocaleTimeString() : 'soon';
+      throw new Error(`GitHub API rate limit exceeded. Resets at ${time}.`);
+    }
+  }
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+
+  const data = await res.json();
+  if (!Array.isArray(data)) throw new Error('Unexpected response format');
+
+  state.cache.set(key, data);
+  state.allItems = data;
+  return data;
+}
+
+/* ===================== SIDEBAR UI ===================== */
+function renderBreadcrumb() {
+  const parts = state.currentPath.split('/').filter(Boolean);
+  let html = `<a onclick="navigateTo('')">${escapeHtml(state.repo)}</a>`;
+  let acc = '';
+  for (const p of parts) {
+    acc += (acc ? '/' : '') + p;
+    html += ` <span class="sep">/</span> <a onclick="navigateTo('${escapeHtml(acc)}')">${escapeHtml(p)}</a>`;
+  }
+  els.breadcrumb.innerHTML = html;
+}
+
+function renderFileList(items) {
+  const sorted = [...items].sort((a,b)=>{
+    if (a.type === b.type) return a.name.localeCompare(b.name);
+    return a.type==='dir' ? -1 : 1;
+  });
+
+  els.fileList.innerHTML = '';
+  for (const item of sorted) {
+    const info = item.type==='dir' ? {icon:'folder'} : getFileCategory(item.name);
+    const icon = ICONS[info.icon] || ICONS.file;
+    const size = item.type==='file' ? formatBytes(item.size) : '';
+
+    const row = document.createElement('div');
+    row.className = 'file-item' + (item.type==='dir'?' dir':'') + (state.activeFile===item.path?' active':'');
+    row.onclick = () => item.type==='dir' ? navigateTo(item.path) : openFile(item);
+    row.innerHTML = `
+      <div class="icon">${icon}</div>
+      <div class="name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+      <div class="size">${size}</div>
+    `;
+    els.fileList.appendChild(row);
+  }
+}
+
+/* ===================== FILTER ===================== */
+els.fileFilter.addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  if (!state.allItems.length) return;
+  const filtered = state.allItems.filter(item => item.name.toLowerCase().includes(q));
+  renderFileList(filtered);
+});
+
+/* ===================== PREVIEW ===================== */
+async function openFile(item) {
+  state.activeFile = item.path;
+  const currentItems = state.cache.get(`${state.owner}/${state.repo}/${state.currentPath || 'root'}`);
+  if (currentItems) renderFileList(currentItems);
+
+  const info = getFileCategory(item.name);
+  const downloadUrl = item.download_url;
+  const htmlUrl = item.html_url;
+
+  els.preview.innerHTML = `
+    <div class="preview-header">
+      <div>
+        <div class="preview-title">
+          <div class="icon">${ICONS[info.icon] || ICONS.file}</div>
+          ${escapeHtml(item.name)}
+        </div>
+        <div class="preview-meta">${formatBytes(item.size)} &bull; ${info.type.toUpperCase()}</div>
+      </div>
+      <div class="preview-actions">
+        <button onclick="window.open('${htmlUrl}','_blank')">Open on GitHub</button>
+        <button onclick="window.open('${downloadUrl}','_blank')">Download</button>
+        ${info.type === 'html' ? `<button onclick="openHtmlLiveEditorFromFile('${downloadUrl}')">Live Editor</button>` : ''}
+      </div>
+    </div>
+    <div class="preview-content ${info.type}" id="pc">
+      <div style="padding:40px;text-align:center;color:var(--text-secondary);">
+        <div class="shimmer" style="width:40px;height:40px;margin:0 auto 16px;border-radius:50%;"></div>
+        Loading preview…
+      </div>
+    </div>
+  `;
+
+  const pc = document.getElementById('pc');
+
+  try {
+    if (item.size > 2 * 1024 * 1024) {
+      pc.innerHTML = `
+        <div class="binary">
+          <div class="big-icon">📦</div>
+          <p>File is too large to preview safely.</p>
+          <p style="font-size:12px;margin-top:6px;color:var(--text-tertiary);">${formatBytes(item.size)}</p>
+          <a href="${downloadUrl}" target="_blank">Download File</a>
+        </div>`;
+      return;
+    }
+
+    if (info.type === 'image') {
+      pc.innerHTML = `<img src="${downloadUrl}" alt="${escapeHtml(item.name)}" onload="this.style.opacity=1" style="opacity:0;transition:opacity .5s ease;">`;
+    }
+    else if (info.type === 'audio') {
+      pc.innerHTML = `<audio controls src="${downloadUrl}" preload="metadata"></audio>`;
+    }
+    else if (info.type === 'video') {
+      pc.innerHTML = `<video controls src="${downloadUrl}" preload="metadata" style="max-width:100%;max-height:72vh;border-radius:var(--radius);"></video>`;
+    }
+    else if (info.type === 'pdf') {
+      pc.innerHTML = `<iframe src="${downloadUrl}" sandbox="allow-same-origin"></iframe>`;
+    }
+    else if (['text','code','html','markdown'].includes(info.type)) {
+      const res = await fetch(downloadUrl);
+      if (!res.ok) throw new Error('Failed to fetch raw file');
+      const text = await res.text();
+
+      if (info.type === 'markdown') {
+        const raw = marked.parse(text);
+        const clean = DOMPurify.sanitize(raw);
+        pc.innerHTML = `<div class="markdown">${clean}</div>`;
+      }
+      else if (info.type === 'html') {
+        const safeText = escapeHtml(text);
+        pc.innerHTML = `
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchHtmlTab(event,'source')">Source</button>
+            <button class="tab-btn" onclick="switchHtmlTab(event,'preview')">Preview</button>
+            <button class="tab-btn" onclick="switchHtmlTab(event,'live')">🔥 Live Editor</button>
+          </div>
+          <div class="tab-body" id="html-source"><pre><code class="language-markup">${safeText}</code></pre></div>
+          <div class="tab-body" id="html-preview" style="display:none;padding:0;">
+            <iframe sandbox="allow-scripts" style="width:100%;height:72vh;border:none;background:#fff;" id="html-preview-frame"></iframe>
+          </div>
+          <div class="tab-body" id="html-live" style="display:none;padding:0;"></div>
+        `;
+        window.__htmlPreviewText = text;
+        // Auto-load preview in sandboxed iframe
+        setTimeout(() => {
+          const frame = document.getElementById('html-preview-frame');
+          if (frame) {
+            const blob = new Blob([text], {type: 'text/html'});
+            frame.src = URL.createObjectURL(blob);
+          }
+        }, 0);
+        Prism.highlightAll();
+      }
+      else {
+        const langClass = info.lang ? `language-${mapPrismLang(info.lang)}` : 'language-text';
+        pc.innerHTML = `<pre><code class="${langClass}">${escapeHtml(text)}</code></pre>`;
+        Prism.highlightAll();
+      }
+    }
+    else {
+      pc.innerHTML = `
+        <div class="binary">
+          <div class="big-icon">📦</div>
+          <p>Binary file</p>
+          <p style="font-size:12px;margin-top:6px;color:var(--text-tertiary);">${escapeHtml(item.name)}</p>
+          <a href="${downloadUrl}" target="_blank">Download File</a>
+        </div>`;
+    }
+  } catch (err) {
+    pc.innerHTML = `<div class="binary" style="color:var(--danger);"><div class="big-icon">⚠️</div><p>Error loading preview</p><p style="font-size:12px;margin-top:6px;">${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+/* ===================== HTML TABS ===================== */
+window.switchHtmlTab = function(ev, name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  ev.target.classList.add('active');
+  document.getElementById('html-source').style.display = name==='source' ? 'block' : 'none';
+  document.getElementById('html-preview').style.display = name==='preview' ? 'block' : 'none';
+  const liveDiv = document.getElementById('html-live');
+  liveDiv.style.display = name==='live' ? 'block' : 'none';
+
+  if (name==='preview') {
+    const frame = document.getElementById('html-preview-frame');
+    if (window.__htmlPreviewText && !frame.src) {
+      const blob = new Blob([window.__htmlPreviewText], {type: 'text/html'});
+      frame.src = URL.createObjectURL(blob);
+    }
+  }
+  if (name==='live') {
+    renderHtmlLiveEditor(liveDiv, window.__htmlPreviewText || '');
+  }
+};
+
+/* ===================== HTML LIVE EDITOR ===================== */
+function renderHtmlLiveEditor(container, initialCode) {
+  state.htmlLiveText = initialCode;
+  container.innerHTML = `
+    <div class="html-live-editor">
+      <div class="html-live-toolbar">
+        <div class="left-actions">
+          <label>HTML Live Editor</label>
+          <span class="perm-badge" id="perm-sandbox" title="Sandboxed iframe with allow-scripts">🛡️ Sandboxed</span>
+        </div>
+        <div class="right-actions">
+          <button onclick="toggleHtmlLiveSplit()" id="btn-split" title="Toggle split view">⇄ Split</button>
+          <button onclick="refreshHtmlLivePreview()" class="primary">▶ Run</button>
+          <button onclick="requestHtmlPermissions()" title="Request permissions (geolocation, camera, mic, notifications)">🔐 Permissions</button>
+        </div>
+      </div>
+      <div class="html-live-panes ${state.htmlLiveSplit ? 'split' : ''}" id="html-live-panes">
+        <div class="pane-code">
+          <textarea id="html-live-code" placeholder="Paste your HTML/JS/CSS here..." spellcheck="false">${escapeHtml(state.htmlLiveText)}</textarea>
+        </div>
+        <div class="pane-preview">
+          <iframe id="html-live-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-pointer-lock" allow="geolocation; microphone; camera; notifications; fullscreen; payment; midi; encrypted-media; display-capture; autoplay" allowfullscreen></iframe>
+          <div class="preview-overlay" id="html-live-overlay">
+            <div style="font-size:32px;opacity:.4;">▶</div>
+            <p>Click "Run" to execute your HTML/JS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const codeArea = document.getElementById('html-live-code');
+  codeArea.addEventListener('input', (e) => {
+    state.htmlLiveText = e.target.value;
+  });
+  codeArea.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = codeArea.selectionStart;
+      const end = codeArea.selectionEnd;
+      codeArea.value = codeArea.value.substring(0, start) + '  ' + codeArea.value.substring(end);
+      codeArea.selectionStart = codeArea.selectionEnd = start + 2;
+      state.htmlLiveText = codeArea.value;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      refreshHtmlLivePreview();
+    }
+  });
+}
+
+window.toggleHtmlLiveSplit = function() {
+  state.htmlLiveSplit = !state.htmlLiveSplit;
+  const panes = document.getElementById('html-live-panes');
+  if (panes) panes.classList.toggle('split', state.htmlLiveSplit);
+  const btn = document.getElementById('btn-split');
+  if (btn) btn.textContent = state.htmlLiveSplit ? '⇄ Split' : '⛶ Full';
+};
+
+window.refreshHtmlLivePreview = function() {
+  const frame = document.getElementById('html-live-frame');
+  const overlay = document.getElementById('html-live-overlay');
+  const code = state.htmlLiveText;
+  if (!frame) return;
+
+  if (overlay) overlay.style.display = 'none';
+
+  // Inject permission bridge script before running user code
+  const bridge = \`
+    <script>
+    (function(){
+      window.__repoViewerPermissions = {};
+      window.requestRepoPermission = function(type) {
+        return parent.postMessage({type:'REQ_PERM', perm:type}, '*');
+      };
+      // Proxy geolocation
+      if (navigator.geolocation) {
+        const orig = navigator.geolocation.getCurrentPosition;
+        navigator.geolocation.getCurrentPosition = function(cb, err, opts) {
+          parent.postMessage({type:'REQ_PERM', perm:'geolocation'}, '*');
+          return orig.call(navigator.geolocation, cb, err, opts);
+        };
+      }
+      // Proxy notifications
+      const origNotify = window.Notification?.requestPermission;
+      if (origNotify) {
+        window.Notification.requestPermission = function() {
+          parent.postMessage({type:'REQ_PERM', perm:'notifications'}, '*');
+          return origNotify.call(window.Notification);
+        };
+      }
+      // Proxy mediaDevices
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const origGUM = navigator.mediaDevices.getUserMedia;
+        navigator.mediaDevices.getUserMedia = function(c) {
+          parent.postMessage({type:'REQ_PERM', perm:'camera,microphone'}, '*');
+          return origGUM.call(navigator.mediaDevices, c);
+        };
+      }
+    })();
+    <\/script>
+  \`;
+
+  const finalHtml = code.includes('<html') ? code : bridge + code;
+  const blob = new Blob([finalHtml], {type: 'text/html'});
+  frame.src = URL.createObjectURL(blob);
+  showToast('Preview refreshed', 'success');
+};
+
+window.requestHtmlPermissions = async function() {
+  const perms = [];
+  try {
+    const result = await navigator.permissions.query({name:'geolocation'});
+    perms.push('Geolocation: ' + result.state);
+  } catch(e) { perms.push('Geolocation: not supported'); }
+
+  try {
+    const result = await navigator.permissions.query({name:'notifications'});
+    perms.push('Notifications: ' + result.state);
+  } catch(e) { perms.push('Notifications: not supported'); }
+
+  try {
+    const result = await navigator.permissions.query({name:'camera'});
+    perms.push('Camera: ' + result.state);
+  } catch(e) { perms.push('Camera: not supported'); }
+
+  try {
+    const result = await navigator.permissions.query({name:'microphone'});
+    perms.push('Microphone: ' + result.state);
+  } catch(e) { perms.push('Microphone: not supported'); }
+
+  showToast(perms.join(' | '), 'info');
+};
+
+window.openHtmlLiveEditorFromFile = async function(url) {
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    state.htmlLiveText = text;
+    // Switch to live tab if exists
+    const liveDiv = document.getElementById('html-live');
+    if (liveDiv) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const liveBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes('Live'));
+      if (liveBtn) liveBtn.classList.add('active');
+      document.getElementById('html-source').style.display = 'none';
+      document.getElementById('html-preview').style.display = 'none';
+      liveDiv.style.display = 'block';
+      renderHtmlLiveEditor(liveDiv, text);
+      setTimeout(refreshHtmlLivePreview, 100);
+    }
+  } catch (err) {
+    showToast('Failed to load: ' + err.message, 'error');
+  }
+};
+
+// Listen for permission requests from iframe
+window.addEventListener('message', async (e) => {
+  if (e.data && e.data.type === 'REQ_PERM') {
+    const perm = e.data.perm;
+    showToast('Page requested: ' + perm, 'info');
+    // Attempt to trigger permission prompt by calling the actual API
+    if (perm.includes('geolocation')) {
+      navigator.geolocation.getCurrentPosition(()=>{}, ()=>{});
+    }
+    if (perm.includes('notifications') && window.Notification) {
+      window.Notification.requestPermission();
+    }
+    if (perm.includes('camera') || perm.includes('microphone')) {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({video: perm.includes('camera'), audio: perm.includes('microphone')}).catch(()=>{});
+      }
+    }
+  }
+});
+
+/* ===================== NAVIGATION ===================== */
+window.navigateTo = async function(path) {
+  state.currentPath = path;
+  state.activeFile = null;
+  els.fileFilter.value = '';
+  renderBreadcrumb();
+  els.fileList.innerHTML = '<div style="padding:24px;color:var(--text-secondary);text-align:center;"><div class="shimmer" style="width:100%;height:20px;margin-bottom:8px;border-radius:6px;"></div><div class="shimmer" style="width:80%;height:20px;border-radius:6px;"></div></div>';
+  try {
+    const items = await fetchDirectory(path);
+    state.allItems = items;
+    renderFileList(items);
+    els.preview.innerHTML = `
+      <div class="empty-state">
+        <div class="hero-icon" style="width:72px;height:72px;border-radius:20px;">
+          <svg viewBox="0 0 24 24" width="32" height="32"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
+        </div>
+        <h2>Folder</h2>
+        <p>Select a file from the sidebar to preview its contents.</p>
+      </div>`;
+  } catch (e) {
+    els.fileList.innerHTML = `<div style="padding:24px;color:var(--danger);text-align:center;">${escapeHtml(e.message)}</div>`;
+    showToast(e.message, 'error');
+  }
+};
+
+/* ===================== INIT ===================== */
+els.loadBtn.addEventListener('click', () => {
+  const parsed = parseGitHubUrl(els.repoUrl.value);
+  if (!parsed) {
+    showToast('Invalid GitHub URL. Example: https://github.com/Timeness/Genis', 'error');
+    return;
+  }
+  state.owner = parsed.owner;
+  state.repo = parsed.repo;
+  state.currentPath = '';
+  state.cache.clear();
+  state.activeFile = null;
+  els.repoMeta.textContent = `${parsed.owner} / ${parsed.repo}`;
+  showToast(`Loaded ${parsed.owner}/${parsed.repo}`, 'success');
+  window.navigateTo('');
+});
+
+els.repoUrl.addEventListener('keydown', e => { if (e.key==='Enter') els.loadBtn.click(); });
+
+// Drag & drop support
+document.body.addEventListener('dragover', e => { e.preventDefault(); });
+document.body.addEventListener('drop', e => {
+  e.preventDefault();
+  const text = e.dataTransfer.getData('text');
+  if (text && text.includes('github.com')) {
+    els.repoUrl.value = text;
+    els.loadBtn.click();
+  }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    els.fileFilter.focus();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+    e.preventDefault();
+    els.repoUrl.focus();
+    els.repoUrl.select();
+  }
+});
+
+// Load default on first open if URL present
+if (els.repoUrl.value.trim()) {
+  setTimeout(() => els.loadBtn.click(), 300);
+}
+</script>
+</body>
+</html>
