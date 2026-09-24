@@ -25,6 +25,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
 
@@ -233,6 +234,25 @@ body { background: var(--bg); color: var(--text-primary); font-family: var(--fon
 .code-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--bg-deep); border-bottom: 1px solid var(--border); font-size: 11.5px; font-weight: 600; color: var(--text-secondary); font-family: var(--font-mono); }
 .copy-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-secondary); padding: 3px 10px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 600; transition: var(--transition); }
 .copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.iconify { font-size: 16px; vertical-align: middle; margin-right: 4px; }
+.html-live-editor { display: flex; flex-direction: column; height: 68vh; min-height: 360px; background: var(--surface); }
+.html-live-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--bg-deep); border-bottom: 1px solid var(--border); }
+.html-live-toolbar .left-actions, .html-live-toolbar .right-actions { display: flex; align-items: center; gap: 8px; }
+.html-live-toolbar label { font-weight: 700; color: var(--text-primary); }
+.perm-badge { padding: 2px 7px; border-radius: 10px; background: rgba(16,185,129,0.1); color: #047857; font-size: 10px; font-weight: 700; }
+.html-live-toolbar button { padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text-primary); cursor: pointer; font: 600 11px var(--font-ui); }
+.html-live-toolbar button:hover, .html-live-toolbar button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.html-live-panes { display: flex; flex: 1; min-height: 0; }
+.html-live-panes:not(.split) .pane-code { display: none; }
+.html-live-panes:not(.split) .pane-preview { flex: 1; }
+.pane-code, .pane-preview { flex: 1; min-width: 0; position: relative; }
+.pane-code { border-right: 1px solid var(--border); }
+.pane-code textarea { width: 100%; height: 100%; resize: none; border: 0; outline: none; padding: 14px; background: #0f172a; color: #e2e8f0; font: 12px/1.6 var(--font-mono); }
+.pane-preview { background: #fff; }
+.pane-preview iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+.preview-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--text-secondary); background: rgba(248,250,252,0.96); text-align: center; }
+.preview-overlay .iconify { font-size: 28px; opacity: .45; }
+@media (max-width: 700px) { .html-live-toolbar { align-items: flex-start; flex-direction: column; } .html-live-toolbar .right-actions { width: 100%; } .html-live-toolbar button { flex: 1; } .html-live-panes.split { flex-direction: column; } .html-live-panes.split .pane-code { height: 48%; border-right: 0; border-bottom: 1px solid var(--border); } .html-live-panes.split .pane-preview { height: 52%; } }
 </style>
 </head>
 <body>
@@ -262,7 +282,7 @@ body { background: var(--bg); color: var(--text-primary); font-family: var(--fon
           <span class="repo-name" id="current-repo-name">Select a repo</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--text-tertiary)"><path d="M7 10l5 5 5-5z"/></svg>
         </button>
-        <button class="btn btn-ghost btn-sm" id="repo-delete-btn" title="Delete this repository" onclick="confirmDeleteRepo()" style="display:none;">🗑️</button>
+        <button class="btn btn-ghost btn-sm" id="repo-delete-btn" title="Delete this repository" onclick="confirmDeleteRepo()" style="display:none;"><span class="iconify" data-icon="mdi:delete"></span></button>
       </div>
       <div class="breadcrumb-wrap">
         <div class="breadcrumb" id="breadcrumb"><span style="opacity:.5;">Select a repository</span></div>
@@ -276,7 +296,7 @@ body { background: var(--bg); color: var(--text-primary); font-family: var(--fon
         <div class="sidebar-search" style="flex:1;">
           <input type="text" id="file-filter" placeholder="Filter files... (Ctrl+K)">
         </div>
-        <button class="btn btn-sm btn-ghost" id="bulk-mode-btn" onclick="toggleBulkMode()" title="Bulk select mode">☐</button>
+        <button class="btn btn-sm btn-ghost" id="bulk-mode-btn" onclick="toggleBulkMode()" title="Bulk select mode"><span class="iconify" data-icon="mdi:checkbox-blank-outline"></span></button>
       </div>
       <div class="file-list" id="file-list">
         <div class="empty-state" style="opacity:.6; padding: 40px 20px;">
@@ -389,8 +409,8 @@ function parseGitHubUrl(url) {
 function showToast(message, type='info') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  const icon = type==='success' ? '✓' : type==='error' ? '✕' : 'ℹ';
-  toast.innerHTML = `<span style="font-size:15px;">${icon}</span><span>${escapeHtml(message)}</span>`;
+  const icon = type==='success' ? 'mdi:check' : type==='error' ? 'mdi:close' : 'mdi:information';
+  toast.innerHTML = `<span class="iconify" data-icon="${icon}"></span><span>${escapeHtml(message)}</span>`;
   els.toastContainer.appendChild(toast);
   setTimeout(() => {
     toast.classList.add('fade-out');
@@ -621,7 +641,7 @@ function renderRepoItem(r) {
         <div class="repo-name-row">${r.full_name} <span class="badge ${r.private ? 'badge-private' : 'badge-public'}">${r.private ? 'Private' : 'Public'}</span></div>
         <div class="repo-desc">${escapeHtml(r.description || '')}</div>
       </div>
-      <div class="repo-stats">${r.stargazers_count ? '★ ' + r.stargazers_count : ''} ${r.language ? '· ' + r.language : ''}</div>
+      <div class="repo-stats">${r.stargazers_count ? '<span class="iconify" data-icon="mdi:star"></span>' + r.stargazers_count : ''} ${r.language ? '&bull; ' + r.language : ''}</div>
       ${canDelete ? `<div class="repo-actions" onclick="event.stopPropagation(); confirmDeleteRepoFromList('${r.owner.login}', '${r.name}')"><button class="btn btn-sm btn-danger">Delete</button></div>` : ''}
     </div>`;
 }
@@ -657,7 +677,7 @@ window.confirmDeleteRepo = function() {
         <div class="warning-box">
           <strong>WARNING:</strong> This will permanently delete the repository <code>${state.owner}/${state.repo}</code>.<br>This action cannot be undone. All code, issues, PRs, and wiki will be gone forever.
         </div>
-        <label style="font-size:12px; font-weight:700; color:var(--text-secondary);">Type <code style="color:var(--danger); font-family:var(--font-mono);">${state.owner}/${state.repo}</code> to confirm:</label>
+        <label style="font-size:12px; font-weight:700; color:var(--text-secondary);">Type <code style="color:var(--danger); font-family:var(--font-mono);">${state.owner}/${state.repo}</code> <span class="iconify" data-icon="mdi:content-copy" style="cursor:pointer;vertical-align:middle;font-size:14px;color:var(--text-tertiary);" onclick="navigator.clipboard.writeText('${state.owner}/${state.repo}').then(()=>showToast('Copied!','success'))" title="Copy"></span> to confirm:</label>
         <input type="text" class="confirm-input" id="repo-delete-confirm" placeholder="owner/repo" autocomplete="off">
         <div class="modal-actions">
           <button class="btn btn-ghost" onclick="closeAllModals()">Cancel</button>
@@ -707,7 +727,7 @@ window.executeDeleteRepo = async function() {
 /* ===================== BULK FILE DELETE ===================== */
 window.toggleBulkMode = function() {
   state.bulkMode = !state.bulkMode;
-  els.bulkModeBtn.textContent = state.bulkMode ? '☑' : '☐';
+  els.bulkModeBtn.innerHTML = `<span class="iconify" data-icon="${state.bulkMode ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline'}"></span>`;
   els.bulkModeBtn.style.color = state.bulkMode ? 'var(--danger)' : '';
   state.selectedFiles.clear();
   updateBulkBar();
@@ -748,7 +768,7 @@ window.bulkDeleteFiles = async function() {
       <div class="modal-body">
         <div class="warning-box"><strong>WARNING:</strong> These files will be permanently deleted from the repository. This action cannot be undone.</div>
         <ul style="max-height:200px; overflow-y:auto; background:var(--bg-deep); border-radius:var(--radius-sm); padding:12px 12px 12px 28px; border:1px solid var(--border);">${fileList}</ul>
-        <label style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-top:12px; display:block;">Type <code style="color:var(--danger); font-family:var(--font-mono);">DELETE</code> to confirm:</label>
+        <label style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-top:12px; display:block;">Type <code style="color:var(--danger); font-family:var(--font-mono);">DELETE</code> <span class="iconify" data-icon="mdi:content-copy" style="cursor:pointer;vertical-align:middle;font-size:14px;color:var(--text-tertiary);" onclick="navigator.clipboard.writeText('DELETE').then(()=>showToast('Copied!','success'))" title="Copy"></span> to confirm:</label>
         <input type="text" class="confirm-input" id="files-delete-confirm" placeholder="DELETE" autocomplete="off">
         <div class="modal-actions">
           <button class="btn btn-ghost" onclick="closeAllModals()">Cancel</button>
@@ -883,7 +903,7 @@ async function fetchDirectory(path) {
   const limit = res.headers.get('x-ratelimit-limit');
   if (remaining) {
     const low = parseInt(remaining) < 10;
-    els.rateLimit.innerHTML = `<div class="dot" style="background:${low?'var(--danger)':'var(--success)'})"></div><span>API: ${remaining}/${limit}</span>`;
+    els.rateLimit.innerHTML = `<div class="dot" style="background:${low?'var(--danger)':'var(--success)'}"></div><span>API: ${remaining}/${limit}</span>`;
   }
   if (res.status === 401) throw new Error('Unauthorized. Check your token or repo access.');
   if (res.status === 403) {
@@ -1005,7 +1025,7 @@ async function openFile(item) {
         <button onclick="window.open('${htmlUrl}','_blank')">GitHub</button>
         <button onclick="window.open('${downloadUrl}','_blank')">Download</button>
         ${canDelete ? `<button class="danger" onclick="deleteSingleFileByPath('${item.path}', '${item.name}')">Delete</button>` : ''}
-        ${info.type === 'html' ? `<button onclick="openHtmlLiveEditorFromFile('${downloadUrl}')">Live Editor</button>` : ''}
+        ${info.type === 'html' ? `<button onclick="openHtmlLiveEditorFromFile('${escapeHtml(item.path)}')"><span class="iconify" data-icon="mdi:play"></span>Live Editor</button>` : ''}
       </div>
     </div>
     <div class="preview-content ${info.type}" id="pc">
@@ -1017,7 +1037,7 @@ async function openFile(item) {
   const pc = document.getElementById('pc');
   try {
     if (item.size > 2 * 1024 * 1024) {
-      pc.innerHTML = `<div class="binary"><div class="big-icon">📦</div><p>File too large to preview.</p><p style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">${formatBytes(item.size)}</p><a href="${downloadUrl}" target="_blank">Download</a></div>`;
+      pc.innerHTML = `<div class="binary"><div class="big-icon"><span class="iconify" data-icon="mdi:package-variant"></span></div><p>File too large to preview.</p><p style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">${formatBytes(item.size)}</p><a href="${downloadUrl}" target="_blank">Download</a></div>`;
       return;
     }
     if (['image','audio','video','pdf'].includes(info.type)) {
@@ -1042,7 +1062,7 @@ async function openFile(item) {
           pc.innerHTML = `<iframe src="${blobUrl}" sandbox="allow-same-origin"></iframe>`;
         }
       } catch (e) {
-        pc.innerHTML = `<div class="binary" style="color:var(--danger);"><div class="big-icon">⚠️</div><p>Failed to load preview</p><p style="font-size:11px;margin-top:4px;">${escapeHtml(e.message)}</p><a href="${downloadUrl}" target="_blank">Download</a></div>`;
+        pc.innerHTML = `<div class="binary" style="color:var(--danger);"><div class="big-icon"><span class="iconify" data-icon="mdi:alert-circle"></span></div><p>Failed to load preview</p><p style="font-size:11px;margin-top:4px;">${escapeHtml(e.message)}</p><a href="${downloadUrl}" target="_blank">Download</a></div>`;
       }
     } else if (['text','code','html','markdown'].includes(info.type)) {
       let text = '';
@@ -1062,9 +1082,13 @@ async function openFile(item) {
         } else throw new Error('No download URL');
       }
       if (info.type === 'markdown') {
-        const raw = marked.parse(text);
-        const clean = DOMPurify.sanitize(raw);
-        pc.innerHTML = `<div class="markdown">${clean}</div>`;
+        try {
+          const raw = marked.parse(text);
+          const clean = DOMPurify.sanitize(raw);
+          pc.innerHTML = `<div class="markdown">${clean}</div>`;
+        } catch (e) {
+          pc.innerHTML = `<div class="markdown"><pre>${escapeHtml(text)}</pre></div>`;
+        }
       } else if (info.type === 'html') {
         const safeText = escapeHtml(text);
         pc.innerHTML = `
@@ -1090,10 +1114,10 @@ async function openFile(item) {
         document.getElementById('copy-code-btn').style.display = '';
       }
     } else {
-      pc.innerHTML = `<div class="binary"><div class="big-icon">📦</div><p>Binary file</p><p style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">${escapeHtml(item.name)}</p><a href="${downloadUrl}" target="_blank">Download</a></div>`;
+      pc.innerHTML = `<div class="binary"><div class="big-icon"><span class="iconify" data-icon="mdi:package-variant"></span></div><p>Binary file</p><p style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">${escapeHtml(item.name)}</p><a href="${downloadUrl}" target="_blank">Download</a></div>`;
     }
   } catch (err) {
-    pc.innerHTML = `<div class="binary" style="color:var(--danger);"><div class="big-icon">⚠️</div><p>Error loading preview</p><p style="font-size:11px;margin-top:4px;">${escapeHtml(err.message)}</p></div>`;
+    pc.innerHTML = `<div class="binary" style="color:var(--danger);"><div class="big-icon"><span class="iconify" data-icon="mdi:alert-circle"></span></div><p>Error loading preview</p><p style="font-size:11px;margin-top:4px;">${escapeHtml(err.message)}</p></div>`;
   }
 }
 
@@ -1113,10 +1137,13 @@ window.zoomImage = function(img) {
 /* ===================== HTML TABS ===================== */
 window.switchHtmlTab = function(ev, name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  ev.target.classList.add('active');
-  document.getElementById('html-source').style.display = name==='source' ? 'block' : 'none';
-  document.getElementById('html-preview').style.display = name==='preview' ? 'block' : 'none';
+  ev.currentTarget.classList.add('active');
+  const sourceDiv = document.getElementById('html-source');
+  const previewDiv = document.getElementById('html-preview');
+  if (sourceDiv) sourceDiv.style.display = name==='source' ? 'block' : 'none';
+  if (previewDiv) previewDiv.style.display = name==='preview' ? 'block' : 'none';
   const liveDiv = document.getElementById('html-live');
+  if (!liveDiv) return;
   liveDiv.style.display = name==='live' ? 'block' : 'none';
   if (name==='live') renderHtmlLiveEditor(liveDiv, window.__htmlPreviewText || '');
 };
@@ -1138,7 +1165,7 @@ function renderHtmlLiveEditor(container, initialCode) {
         <div class="pane-code"><textarea id="html-live-code" placeholder="Paste HTML/JS/CSS..." spellcheck="false">${escapeHtml(state.htmlLiveText)}</textarea></div>
         <div class="pane-preview">
           <iframe id="html-live-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-pointer-lock" allow="geolocation; microphone; camera; notifications; fullscreen; payment; midi; encrypted-media; display-capture; autoplay" allowfullscreen></iframe>
-          <div class="preview-overlay" id="html-live-overlay"><div style="font-size:28px;opacity:.4;">▶</div><p>Click "Run" to execute</p></div>
+          <div class="preview-overlay" id="html-live-overlay"><span class="iconify" data-icon="mdi:play"></span><p>Click "Run" to execute</p></div>
         </div>
       </div>
     </div>`;
@@ -1175,35 +1202,37 @@ window.requestHtmlPermissions = async function() {
   showToast(perms.join(' | '), 'info');
 };
 
-window.openHtmlLiveEditorFromFile = async function(url) {
+window.openHtmlLiveEditorFromFile = async function(filePath) {
   try {
     let text = '';
-    try {
-      const path = url.split('/contents/')[1] || '';
-      if (path && state.owner && state.repo) {
-        const apiRes = await fetch(`https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}`, { headers: ghHeaders() });
-        if (apiRes.ok) {
-          const apiData = await apiRes.json();
-          text = apiData.content ? atob(apiData.content.replace(/\s/g, '')) : '';
-        } else throw new Error('API failed');
-      } else throw new Error('Cannot determine file path');
-    } catch (e) {
-      const rawRes = await fetch(url, { headers: state.token ? { Authorization: `token ${state.token}` } : {} });
-      if (!rawRes.ok) throw new Error('Failed to load file');
-      text = await rawRes.text();
-    }
+    const path = filePath || '';
+    if (!path || !state.owner || !state.repo) throw new Error('Invalid file path');
+    const normalizedPath = path.includes('/contents/') ? path.split('/contents/')[1] : path;
+    const apiRes = await fetch(`https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(normalizedPath).replace(/%2F/g,'/')}`, { headers: ghHeaders() });
+    if (!apiRes.ok) throw new Error(`API ${apiRes.status}`);
+    const apiData = await apiRes.json();
+    if (!apiData.content) throw new Error('No content field');
+    text = atob(apiData.content.replace(/\s/g, ''));
     state.htmlLiveText = text;
-    const liveDiv = document.getElementById('html-live');
-    if (liveDiv) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      const liveBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes('Live'));
-      if (liveBtn) liveBtn.classList.add('active');
-      document.getElementById('html-source').style.display = 'none';
-      document.getElementById('html-preview').style.display = 'none';
-      liveDiv.style.display = 'block';
-      renderHtmlLiveEditor(liveDiv, text);
-      setTimeout(refreshHtmlLivePreview, 100);
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const liveBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes('Live'));
+    if (liveBtn) liveBtn.classList.add('active');
+    const sourceDiv = document.getElementById('html-source');
+    const previewDiv = document.getElementById('html-preview');
+    if (sourceDiv) sourceDiv.style.display = 'none';
+    if (previewDiv) previewDiv.style.display = 'none';
+    let liveDiv = document.getElementById('html-live');
+    if (!liveDiv) {
+      const tabContainer = sourceDiv && sourceDiv.parentNode;
+      if (!tabContainer) throw new Error('Live editor container unavailable');
+      liveDiv = document.createElement('div');
+      liveDiv.id = 'html-live';
+      liveDiv.className = 'tab-body';
+      tabContainer.appendChild(liveDiv);
     }
+    liveDiv.style.display = 'block';
+    renderHtmlLiveEditor(liveDiv, text);
+    setTimeout(refreshHtmlLivePreview, 100);
   } catch (err) { showToast('Failed: ' + err.message, 'error'); }
 };
 
