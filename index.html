@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RepoViewer Pro | Modern GitHub Repo Explorer</title>
+<title>RepoViewer Ultra | GitHub Repo Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
@@ -30,132 +30,109 @@
 
 <style>
 :root {
-  --bg-deep: #03040a;
-  --bg: #0b0d14;
-  --surface: #121420;
-  --surface-raised: #181b2b;
-  --surface-glass: rgba(18, 20, 36, 0.72);
-  --border: rgba(148, 163, 184, 0.1);
-  --border-hover: rgba(148, 163, 184, 0.2);
-  --text-primary: #f0f4f8;
-  --text-secondary: #8896a8;
-  --text-tertiary: #556272;
-  --accent: #60a5fa;
-  --accent-glow: rgba(96, 165, 250, 0.35);
-  --accent-hover: #7db8fc;
-  --accent-weak: rgba(96, 165, 250, 0.08);
-  --success: #34d399;
-  --danger: #fb7185;
-  --warning: #fbbf24;
-  --purple: #a78bfa;
-  --pink: #f472b6;
-  --cyan: #22d3ee;
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 20px;
+  --bg: #f8fafc;
+  --bg-deep: #f1f5f9;
+  --surface: #ffffff;
+  --surface-hover: #f8fafc;
+  --surface-raised: #ffffff;
+  --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-weak: rgba(37, 99, 235, 0.08);
+  --accent-glow: rgba(37, 99, 235, 0.18);
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --purple: #8b5cf6;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
   --font-ui: "Inter", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-  --shadow: 0 8px 32px rgba(0,0,0,0.35);
-  --shadow-glow: 0 0 40px rgba(96, 165, 250, 0.08);
-  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04);
+  --shadow: 0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -2px rgba(15,23,42,0.05);
+  --shadow-md: 0 10px 15px -3px rgba(15,23,42,0.07), 0 4px 6px -4px rgba(15,23,42,0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(15,23,42,0.08), 0 8px 10px -6px rgba(15,23,42,0.05);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
 body {
-  background: var(--bg-deep);
+  background: var(--bg);
   color: var(--text-primary);
   font-family: var(--font-ui);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(96,165,250,0.07), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(167,139,250,0.05), transparent),
-    radial-gradient(ellipse 50% 60% at 50% 90%, rgba(34,211,238,0.04), transparent);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .app {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  position: relative;
-  z-index: 1;
 }
 
+/* ===== Header ===== */
 .topbar {
-  height: 70px;
-  background: var(--surface-glass);
-  backdrop-filter: blur(20px) saturate(1.4);
+  height: 52px;
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  gap: 20px;
+  padding: 0 16px;
+  gap: 14px;
   flex-shrink: 0;
-  position: relative;
-}
-
-.topbar::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0.3;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 15px;
   color: var(--text-primary);
   white-space: nowrap;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.4px;
+  text-decoration: none;
 }
 
 .brand-icon {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   background: linear-gradient(135deg, var(--accent), var(--purple));
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 20px var(--accent-glow);
 }
 
-.brand-icon svg { width: 20px; height: 20px; fill: #fff; }
+.brand-icon svg { width: 16px; height: 16px; fill: #fff; }
 
 .search-box {
   flex: 1;
-  max-width: 600px;
+  max-width: 420px;
   display: flex;
-  gap: 10px;
-  background: rgba(0,0,0,0.25);
+  gap: 6px;
+  background: var(--bg-deep);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 5px;
+  border-radius: var(--radius-sm);
+  padding: 4px;
   transition: var(--transition);
-  position: relative;
 }
 
 .search-box:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-weak), 0 0 30px rgba(96,165,250,0.1);
+  box-shadow: 0 0 0 3px var(--accent-weak);
 }
 
 .search-box input {
@@ -163,84 +140,181 @@ body::before {
   background: transparent;
   border: none;
   color: var(--text-primary);
-  padding: 8px 12px;
+  padding: 5px 10px;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 12.5px;
   outline: none;
 }
 
 .search-box input::placeholder { color: var(--text-tertiary); }
 
 .search-box button {
-  background: linear-gradient(135deg, var(--accent), var(--purple));
+  background: var(--accent);
   color: #fff;
   border: none;
-  padding: 9px 20px;
-  border-radius: 10px;
+  padding: 6px 14px;
+  border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   font-family: inherit;
-  font-size: 13px;
-  position: relative;
-  overflow: hidden;
+  font-size: 12px;
 }
 
-.search-box button::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.5s;
-}
+.search-box button:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
-.search-box button:hover::before { transform: translateX(100%); }
-.search-box button:hover { transform: translateY(-1px); box-shadow: 0 8px 25px var(--accent-glow); }
-.search-box button:active { transform: translateY(1px); }
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .repo-meta {
-  margin-left: auto;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   font-weight: 600;
   font-family: var(--font-mono);
   white-space: nowrap;
-  background: var(--surface-raised);
-  padding: 6px 14px;
-  border-radius: 20px;
+  background: var(--bg-deep);
+  padding: 4px 10px;
+  border-radius: 12px;
   border: 1px solid var(--border);
 }
 
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-chip img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.btn:hover { background: var(--bg-deep); border-color: var(--border-hover); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+.btn-sm { padding: 4px 10px; font-size: 11.5px; }
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.btn-danger:hover { background: #dc2626; border-color: #dc2626; }
+
+/* ===== Workspace ===== */
 .workspace {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
+/* ===== Sidebar ===== */
 .sidebar {
-  width: 320px;
-  min-width: 260px;
-  background: var(--surface-glass);
-  backdrop-filter: blur(16px);
+  width: 300px;
+  min-width: 240px;
+  background: var(--surface);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.breadcrumb-wrap {
-  padding: 14px 16px;
+.sidebar-header {
+  padding: 10px 12px;
   border-bottom: 1px solid var(--border);
-  background: rgba(3,4,10,0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.repo-select-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: var(--transition);
+  text-align: left;
+}
+
+.repo-select-btn:hover { border-color: var(--accent); }
+
+.repo-select-btn .repo-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: var(--accent-weak);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.repo-select-btn .repo-icon svg { width: 12px; height: 12px; fill: var(--accent); }
+
+.repo-select-btn .repo-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.breadcrumb-wrap {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-deep);
 }
 
 .breadcrumb {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
 }
 
@@ -250,35 +324,28 @@ body::before {
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 2px 5px;
+  border-radius: 4px;
 }
 
-.breadcrumb a:hover {
-  background: var(--accent-weak);
-  text-decoration: none;
-}
+.breadcrumb a:hover { background: var(--accent-weak); }
 
-.breadcrumb .sep {
-  opacity: 0.3;
-  font-size: 11px;
-  color: var(--text-tertiary);
-}
+.breadcrumb .sep { color: var(--text-tertiary); font-size: 10px; }
 
 .sidebar-search {
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border);
 }
 
 .sidebar-search input {
   width: 100%;
-  background: rgba(0,0,0,0.2);
+  background: var(--bg-deep);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 8px 12px;
+  padding: 6px 10px;
   color: var(--text-primary);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   outline: none;
   transition: var(--transition);
 }
@@ -293,106 +360,98 @@ body::before {
 .file-list {
   flex: 1;
   overflow-y: auto;
-  padding: 8px;
+  padding: 6px;
 }
 
 .file-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
+  gap: 8px;
+  padding: 5px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: var(--transition);
   color: var(--text-primary);
-  text-decoration: none;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   border: 1px solid transparent;
   position: relative;
-  overflow: hidden;
+  font-size: 12.5px;
 }
 
 .file-item::before {
   content: "";
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  width: 3px;
+  width: 2.5px;
   background: var(--accent);
   border-radius: 0 3px 3px 0;
   opacity: 0;
-  transform: scaleY(0.6);
   transition: var(--transition);
 }
 
 .file-item:hover {
-  background: rgba(255,255,255,0.03);
-  border-color: var(--border-hover);
-  transform: translateX(2px);
+  background: var(--bg-deep);
+  border-color: var(--border);
 }
 
 .file-item.active {
   background: var(--accent-weak);
-  border-color: rgba(96,165,250,0.2);
+  border-color: rgba(37,99,235,0.15);
 }
 
-.file-item.active::before {
-  opacity: 1;
-  transform: scaleY(1);
-}
+.file-item.active::before { opacity: 1; }
 
 .file-item .icon {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.file-item .icon svg { width: 18px; height: 18px; }
+.file-item .icon svg { width: 15px; height: 15px; }
 
 .file-item .name {
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 13px;
   font-weight: 500;
 }
 
 .file-item .size {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-tertiary);
   font-family: var(--font-mono);
   flex-shrink: 0;
 }
 
 .rate-limit {
-  padding: 10px 16px;
-  font-size: 11px;
+  padding: 8px 12px;
+  font-size: 10.5px;
   color: var(--text-secondary);
   border-top: 1px solid var(--border);
-  background: rgba(3,4,10,0.4);
+  background: var(--bg-deep);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-family: var(--font-mono);
 }
 
 .rate-limit .dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--success);
-  box-shadow: 0 0 8px currentColor;
 }
 
+/* ===== Preview ===== */
 .preview {
   flex: 1;
   overflow-y: auto;
-  background: transparent;
-  padding: 24px 28px;
-  position: relative;
+  background: var(--bg);
+  padding: 16px 20px;
 }
 
 .empty-state {
@@ -403,105 +462,113 @@ body::before {
   height: 100%;
   color: var(--text-secondary);
   text-align: center;
-  gap: 20px;
-  animation: fadeIn 0.5s ease;
+  gap: 16px;
+  animation: fadeIn 0.4s ease;
 }
 
 .empty-state .hero-icon {
-  width: 100px;
-  height: 100px;
+  width: 72px;
+  height: 72px;
   background: linear-gradient(135deg, var(--accent), var(--purple));
-  border-radius: 28px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 60px rgba(96,165,250,0.2);
-  margin-bottom: 10px;
+  box-shadow: var(--shadow-md);
 }
 
-.empty-state .hero-icon svg { width: 50px; height: 50px; fill: #fff; }
+.empty-state .hero-icon svg { width: 36px; height: 36px; fill: #fff; }
 
 .empty-state h2 {
   margin: 0;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 20px;
   color: var(--text-primary);
-  letter-spacing: -0.5px;
+  letter-spacing: -0.4px;
 }
 
 .empty-state p {
   margin: 0;
-  max-width: 360px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  font-size: 14px;
+  max-width: 340px;
+  line-height: 1.65;
+  font-size: 13px;
 }
 
 .preview-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
-  padding: 16px 20px;
+  margin-bottom: 12px;
+  padding: 12px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.25s ease;
   box-shadow: var(--shadow-sm);
 }
 
 .preview-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 10px;
-  letter-spacing: -0.2px;
+  gap: 8px;
 }
 
-.preview-title .icon svg { width: 22px; height: 22px; }
+.preview-title .icon svg { width: 18px; height: 18px; }
 
 .preview-meta {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-tertiary);
-  margin-top: 3px;
+  margin-top: 2px;
   font-family: var(--font-mono);
 }
 
 .preview-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
-.preview-actions button,
-.tab-btn {
-  background: var(--surface-raised);
+.preview-actions button {
+  background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  padding: 8px 16px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.preview-actions button:hover {
+  background: var(--bg-deep);
+  border-color: var(--border-hover);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 6px 14px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  border-radius: 0;
 }
 
-.preview-actions button:hover,
-.tab-btn:hover {
-  background: rgba(255,255,255,0.05);
-  border-color: var(--border-hover);
-  transform: translateY(-1px);
-}
+.tab-btn:hover { color: var(--text-primary); }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, var(--accent), var(--purple));
-  border-color: transparent;
-  color: #fff;
-  box-shadow: 0 4px 15px var(--accent-glow);
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: var(--accent-weak);
 }
 
 .preview-content {
@@ -509,8 +576,8 @@ body::before {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  animation: fadeIn 0.35s ease;
-  box-shadow: var(--shadow);
+  animation: fadeIn 0.3s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .preview-content.image,
@@ -521,42 +588,39 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
   box-shadow: none;
 }
 
 .preview-content.image img {
   max-width: 100%;
-  max-height: 72vh;
+  max-height: 70vh;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  box-shadow: var(--shadow-md);
+  cursor: zoom-in;
   transition: var(--transition);
 }
 
-.preview-content.image img:hover {
-  transform: scale(1.01);
-  box-shadow: 0 25px 70px rgba(0,0,0,0.5);
-}
+.preview-content.image img:hover { box-shadow: var(--shadow-lg); }
 
 .preview-content.audio audio {
   width: 100%;
-  max-width: 560px;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+  max-width: 480px;
 }
 
 .preview-content.video video {
   width: 100%;
-  max-width: 800px;
-  max-height: 72vh;
+  max-width: 720px;
+  max-height: 70vh;
   border-radius: var(--radius);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  box-shadow: var(--shadow-md);
 }
 
 .preview-content.pdf iframe,
 .preview-content.html iframe {
   width: 100%;
-  height: 72vh;
+  height: 70vh;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: #fff;
@@ -565,12 +629,12 @@ body::before {
 .preview-content.code pre,
 .preview-content.text pre {
   margin: 0;
-  padding: 20px;
+  padding: 16px;
   overflow-x: auto;
   font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.7;
-  max-height: 74vh;
+  font-size: 12px;
+  line-height: 1.6;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
@@ -581,9 +645,9 @@ body::before {
 }
 
 .preview-content.markdown {
-  padding: 32px 36px;
-  line-height: 1.75;
-  max-width: 920px;
+  padding: 24px 28px;
+  line-height: 1.7;
+  max-width: 860px;
   margin: 0 auto;
 }
 
@@ -591,8 +655,8 @@ body::before {
 .preview-content.markdown h2,
 .preview-content.markdown h3 {
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5em;
-  margin-top: 1.6em;
+  padding-bottom: 0.4em;
+  margin-top: 1.4em;
   color: var(--text-primary);
 }
 
@@ -603,9 +667,9 @@ body::before {
 }
 
 .preview-content.markdown code {
-  background: var(--bg);
-  padding: 3px 7px;
-  border-radius: 6px;
+  background: var(--bg-deep);
+  padding: 2px 6px;
+  border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 0.88em;
   color: var(--accent);
@@ -613,57 +677,55 @@ body::before {
 
 .preview-content.markdown pre code {
   display: block;
-  padding: 16px;
+  padding: 12px;
   overflow-x: auto;
-  color: #abb2bf;
+  color: #333;
 }
 
 .preview-content.binary {
-  padding: 60px;
+  padding: 40px;
   text-align: center;
   color: var(--text-secondary);
 }
 
 .preview-content.binary .big-icon {
-  font-size: 64px;
-  margin-bottom: 20px;
-  opacity: 0.3;
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.35;
 }
 
 .preview-content.binary a {
   color: var(--accent);
   text-decoration: none;
   font-weight: 700;
-  padding: 10px 24px;
+  padding: 8px 20px;
   border: 1px solid var(--accent);
   border-radius: var(--radius-sm);
   display: inline-block;
-  margin-top: 16px;
+  margin-top: 12px;
   transition: var(--transition);
 }
 
 .preview-content.binary a:hover {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 4px 20px var(--accent-glow);
 }
 
 .tabs {
   display: flex;
-  gap: 6px;
-  padding: 12px 16px 0;
+  gap: 2px;
+  padding: 0 12px;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
 
-.tab-body {
-  padding: 0;
-}
+.tab-body { padding: 0; }
 
+/* ===== HTML Live Editor ===== */
 .html-live-editor {
   display: flex;
   flex-direction: column;
-  height: 72vh;
+  height: 68vh;
   background: var(--surface);
   border-radius: var(--radius);
   overflow: hidden;
@@ -674,55 +736,26 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
-  background: var(--surface-raised);
+  padding: 8px 12px;
+  background: var(--bg-deep);
   border-bottom: 1px solid var(--border);
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .html-live-toolbar .left-actions,
 .html-live-toolbar .right-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
 }
 
 .html-live-toolbar label {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--text-secondary);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.html-live-toolbar button {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 6px 14px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.html-live-toolbar button:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: var(--border-hover);
-}
-
-.html-live-toolbar button.primary {
-  background: linear-gradient(135deg, var(--accent), var(--purple));
-  border-color: transparent;
-  color: #fff;
-}
-
-.html-live-toolbar button.primary:hover {
-  box-shadow: 0 4px 15px var(--accent-glow);
-  transform: translateY(-1px);
 }
 
 .html-live-panes {
@@ -731,15 +764,10 @@ body::before {
   overflow: hidden;
 }
 
-.html-live-panes.split {
-  flex-direction: row;
-}
+.html-live-panes.split { flex-direction: row; }
 
 .html-live-panes.split .pane-code,
-.html-live-panes.split .pane-preview {
-  flex: 1;
-  width: 50%;
-}
+.html-live-panes.split .pane-preview { flex: 1; width: 50%; }
 
 .html-live-panes:not(.split) .pane-code { display: none; }
 .html-live-panes:not(.split) .pane-preview { flex: 1; width: 100%; }
@@ -753,13 +781,13 @@ body::before {
 .pane-code textarea {
   flex: 1;
   width: 100%;
-  background: var(--bg);
+  background: var(--bg-deep);
   border: none;
   color: var(--text-primary);
   font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.65;
-  padding: 16px;
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 12px;
   resize: none;
   outline: none;
 }
@@ -787,112 +815,349 @@ body::before {
   background: var(--bg);
   color: var(--text-secondary);
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .perm-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  background: rgba(52,211,153,0.1);
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(16,185,129,0.1);
   color: var(--success);
-  border: 1px solid rgba(52,211,153,0.2);
+  border: 1px solid rgba(16,185,129,0.2);
 }
 
-.perm-badge.denied {
-  background: rgba(251,113,133,0.1);
-  color: var(--danger);
-  border-color: rgba(251,113,133,0.2);
-}
-
-.perm-badge.warn {
-  background: rgba(251,191,36,0.1);
-  color: var(--warning);
-  border-color: rgba(251,191,36,0.2);
-}
-
-.toast-container {
+/* ===== Repo Selector Modal ===== */
+.modal-overlay {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
+  inset: 0;
+  background: rgba(15,23,42,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 90%;
+  max-width: 520px;
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  overflow: hidden;
+  animation: slideUp 0.25s ease;
 }
 
-.toast {
-  background: var(--surface-raised);
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 20px;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.modal-close:hover { background: var(--bg-deep); color: var(--text-primary); }
+
+.modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-search {
+  width: 100%;
+  background: var(--bg-deep);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 14px 18px;
+  padding: 8px 12px;
   color: var(--text-primary);
+  font-family: inherit;
   font-size: 13px;
-  font-weight: 500;
-  box-shadow: var(--shadow);
-  animation: slideIn 0.3s ease;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.modal-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-weak); }
+
+.repo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.repo-list-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 260px;
-  backdrop-filter: blur(10px);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.repo-list-item:hover {
+  background: var(--bg-deep);
+  border-color: var(--border);
+}
+
+.repo-list-item .repo-info { flex: 1; min-width: 0; }
+
+.repo-list-item .repo-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.repo-list-item .repo-desc {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.repo-list-item .repo-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.badge-private {
+  background: rgba(239,68,68,0.08);
+  color: var(--danger);
+  border: 1px solid rgba(239,68,68,0.15);
+}
+
+.badge-public {
+  background: rgba(16,185,129,0.08);
+  color: var(--success);
+  border: 1px solid rgba(16,185,129,0.15);
+}
+
+/* ===== Auth Modal ===== */
+.auth-hero {
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.auth-hero .brand-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  margin: 0 auto 16px;
+}
+
+.auth-hero .brand-icon svg { width: 28px; height: 28px; }
+
+.auth-hero h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.auth-hero p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.auth-form {
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-group input:focus, .form-group textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-weak);
+}
+
+.form-group .hint {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+.security-note {
+  background: rgba(16,185,129,0.06);
+  border: 1px solid rgba(16,185,129,0.12);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.security-note strong { color: var(--success); }
+
+.tabs-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  gap: 4px;
+}
+
+.tab-pill {
+  padding: 10px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.tab-pill:hover { color: var(--text-primary); }
+
+.tab-pill.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===== Toast ===== */
+.toast-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  animation: slideIn 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 240px;
 }
 
 .toast.success { border-left: 3px solid var(--success); }
 .toast.error { border-left: 3px solid var(--danger); }
 .toast.info { border-left: 3px solid var(--accent); }
 
-.toast.fade-out {
-  animation: slideOut 0.3s ease forwards;
+.toast.fade-out { animation: slideOut 0.25s ease forwards; }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #1e2235; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #2a2f47; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(30px); }
+  from { opacity: 0; transform: translateX(20px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideOut {
   from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(30px); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@media (max-width: 900px) {
-  .workspace { flex-direction: column; }
-  .sidebar { width: 100%; height: 38%; min-height: 200px; border-right: none; border-bottom: 1px solid var(--border); }
-  .preview { padding: 16px; }
-  .topbar { flex-wrap: wrap; height: auto; padding: 14px; gap: 12px; }
-  .search-box { max-width: 100%; width: 100%; order: 3; }
-  .repo-meta { margin-left: 0; order: 2; }
-  .html-live-panes.split { flex-direction: column; }
-  .html-live-panes.split .pane-code,
-  .html-live-panes.split .pane-preview { width: 100%; height: 50%; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  to { opacity: 0; transform: translateX(20px); }
 }
 
 .shimmer {
-  background: linear-gradient(90deg, var(--surface) 25%, var(--surface-raised) 50%, var(--surface) 75%);
+  background: linear-gradient(90deg, var(--bg-deep) 25%, var(--border) 50%, var(--bg-deep) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-sm);
@@ -902,54 +1167,107 @@ body::before {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* ===== Responsive ===== */
+@media (max-width: 800px) {
+  .workspace { flex-direction: column; }
+  .sidebar { width: 100%; height: 35%; min-height: 180px; border-right: none; border-bottom: 1px solid var(--border); }
+  .preview { padding: 12px; }
+  .html-live-panes.split { flex-direction: column; }
+  .html-live-panes.split .pane-code,
+  .html-live-panes.split .pane-preview { width: 100%; height: 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.copy-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 </style>
 </head>
 <body>
 
-<div class="app">
+<div class="app" id="app">
   <header class="topbar">
-    <div class="brand">
+    <a href="#" class="brand" onclick="location.reload()">
       <div class="brand-icon">
         <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.215 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.28-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
       </div>
-      <span>RepoViewer Pro</span>
-    </div>
+      <span>RepoViewer Ultra</span>
+    </a>
     <div class="search-box">
-      <input type="text" id="repo-url" placeholder="https://github.com/user/repo" value="https://github.com/Timeness/Genis">
-      <button id="load-btn">Load Repo</button>
+      <input type="text" id="repo-url" placeholder="https://github.com/user/repo">
+      <button id="load-btn">Load</button>
     </div>
-    <div class="repo-meta" id="repo-meta">Ready</div>
+    <div class="topbar-right" id="topbar-right">
+      <button class="btn btn-primary btn-sm" id="auth-btn" onclick="openAuthModal()">Sign In</button>
+    </div>
   </header>
 
   <div class="workspace">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar" style="display:none;">
+      <div class="sidebar-header">
+        <button class="repo-select-btn" id="repo-select-btn" onclick="openRepoModal()">
+          <div class="repo-icon"><svg viewBox="0 0 24 24"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg></div>
+          <span class="repo-name" id="current-repo-name">Select a repo</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--text-tertiary)"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+      </div>
       <div class="breadcrumb-wrap">
-        <div class="breadcrumb" id="breadcrumb">
-          <span style="opacity:.5;">Enter a repo URL to browse</span>
-        </div>
+        <div class="breadcrumb" id="breadcrumb"><span style="opacity:.5;">Select a repository</span></div>
       </div>
       <div class="sidebar-search">
         <input type="text" id="file-filter" placeholder="Filter files... (Ctrl+K)">
       </div>
       <div class="file-list" id="file-list">
-        <div class="empty-state" style="opacity:.7;">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
-          <p>No repo loaded yet</p>
+        <div class="empty-state" style="opacity:.6; padding: 40px 20px;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
+          <p style="font-size:12px;">No repo selected</p>
         </div>
       </div>
       <div class="rate-limit" id="rate-limit">
         <div class="dot"></div>
-        <span>Ready to fetch</span>
+        <span>Ready</span>
       </div>
     </aside>
 
     <main class="preview" id="preview">
-      <div class="empty-state">
+      <div class="empty-state" id="main-empty">
         <div class="hero-icon">
           <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z"/></svg>
         </div>
-        <h2>Preview Files Instantly</h2>
-        <p>Paste any public GitHub repo link, browse the file tree, and click any file to preview images, HTML, audio, code, markdown, and more. Use the HTML Live Editor to paste and run HTML/JS instantly.</p>
+        <h2>Explore GitHub Repositories</h2>
+        <p>Sign in with your GitHub token to browse all your public and private repos securely. Or paste any public repo URL above to start instantly.</p>
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button class="btn btn-primary" onclick="openAuthModal()">Sign In with Token</button>
+          <button class="btn" onclick="document.getElementById('repo-url').focus()">Browse Public Repo</button>
+        </div>
       </div>
     </main>
   </div>
@@ -960,21 +1278,24 @@ body::before {
 <script>
 /* ===================== ICONS ===================== */
 const ICONS = {
-  folder: `<svg viewBox="0 0 24 24" fill="#60a5fa"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg>`,
-  file:   `<svg viewBox="0 0 24 24" fill="#8896a8"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
-  image:  `<svg viewBox="0 0 24 24" fill="#34d399"><path d="M4 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4zm0 16v-6l4-4 4 4 6-6 2 2v10H4z"/></svg>`,
-  audio:  `<svg viewBox="0 0 24 24" fill="#a78bfa"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`,
-  video:  `<svg viewBox="0 0 24 24" fill="#f472b6"><path d="M8 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V6zM2 8a2 2 0 0 1 2-2v12a2 2 0 0 1-2-2V8zm17.5 4l-5 3v-6l5 3z"/></svg>`,
-  code:   `<svg viewBox="0 0 24 24" fill="#22d3ee"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>`,
-  text:   `<svg viewBox="0 0 24 24" fill="#8896a8"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4zm2 0v12h12V8h-6V4H6z"/></svg>`,
-  binary: `<svg viewBox="0 0 24 24" fill="#fbbf24"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
-  pdf:    `<svg viewBox="0 0 24 24" fill="#fb7185"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  folder: `<svg viewBox="0 0 24 24" fill="#2563eb"><path d="M2 6a2 2 0 0 1 2-2h5l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z"/></svg>`,
+  file:   `<svg viewBox="0 0 24 24" fill="#94a3b8"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  image:  `<svg viewBox="0 0 24 24" fill="#10b981"><path d="M4 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4zm0 16v-6l4-4 4 4 6-6 2 2v10H4z"/></svg>`,
+  audio:  `<svg viewBox="0 0 24 24" fill="#8b5cf6"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`,
+  video:  `<svg viewBox="0 0 24 24" fill="#ec4899"><path d="M8 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V6zM2 8a2 2 0 0 1 2-2v12a2 2 0 0 1-2-2V8zm17.5 4l-5 3v-6l5 3z"/></svg>`,
+  code:   `<svg viewBox="0 0 24 24" fill="#06b6d4"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>`,
+  text:   `<svg viewBox="0 0 24 24" fill="#64748b"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4zm2 0v12h12V8h-6V4H6z"/></svg>`,
+  binary: `<svg viewBox="0 0 24 24" fill="#f59e0b"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  pdf:    `<svg viewBox="0 0 24 24" fill="#ef4444"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
   html:   `<svg viewBox="0 0 24 24" fill="#f97316"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
-  markdown:`<svg viewBox="0 0 24 24" fill="#22d3ee"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
+  markdown:`<svg viewBox="0 0 24 24" fill="#06b6d4"><path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/></svg>`,
 };
 
 /* ===================== STATE ===================== */
 const state = {
+  token: sessionStorage.getItem('gh_token') || null,
+  user: JSON.parse(sessionStorage.getItem('gh_user') || 'null'),
+  repos: JSON.parse(sessionStorage.getItem('gh_repos') || '[]'),
   owner: null,
   repo: null,
   currentPath: '',
@@ -995,6 +1316,11 @@ const els = {
   rateLimit: document.getElementById('rate-limit'),
   fileFilter: document.getElementById('file-filter'),
   toastContainer: document.getElementById('toast-container'),
+  topbarRight: document.getElementById('topbar-right'),
+  sidebar: document.getElementById('sidebar'),
+  mainEmpty: document.getElementById('main-empty'),
+  currentRepoName: document.getElementById('current-repo-name'),
+  authBtn: document.getElementById('auth-btn'),
 };
 
 /* ===================== UTILS ===================== */
@@ -1026,24 +1352,314 @@ function showToast(message, type='info') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   const icon = type==='success' ? '✓' : type==='error' ? '✕' : 'ℹ';
-  toast.innerHTML = `<span style="font-size:16px;">${icon}</span><span>${escapeHtml(message)}</span>`;
+  toast.innerHTML = `<span style="font-size:15px;">${icon}</span><span>${escapeHtml(message)}</span>`;
   els.toastContainer.appendChild(toast);
   setTimeout(() => {
     toast.classList.add('fade-out');
     setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  }, 3500);
 }
 
-/* ===================== FILE TYPE DETECTION ===================== */
+function ghHeaders() {
+  const h = { Accept: 'application/vnd.github+json' };
+  if (state.token) h.Authorization = `token ${state.token}`;
+  return h;
+}
+
+/* ===================== AUTH ===================== */
+function openAuthModal() {
+  closeAllModals();
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'auth-modal';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:460px;">
+      <div class="modal-header">
+        <h3>Authentication</h3>
+        <button class="modal-close" onclick="closeAllModals()">&times;</button>
+      </div>
+      <div class="tabs-row">
+        <button class="tab-pill active" onclick="switchAuthTab(this,'pat')">Personal Token</button>
+        <button class="tab-pill" onclick="switchAuthTab(this,'oauth')">OAuth Device Flow</button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-panel active" id="tab-pat">
+          <div class="auth-hero" style="padding:20px;">
+            <div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.215 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.28-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
+            <h2>Secure GitHub Login</h2>
+            <p>Your token is stored only in session memory. It is erased the moment you close this tab.</p>
+          </div>
+          <div class="auth-form">
+            <div class="form-group">
+              <label>Personal Access Token</label>
+              <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+              <div class="hint">Generate at github.com/settings/tokens with <b>repo</b> scope for private repos.</div>
+            </div>
+            <div class="security-note">
+              <strong>101% Secure:</strong> Token never leaves your browser. Stored in sessionStorage only. Auto-cleared on tab close. No server, no logs, no tracking.
+            </div>
+            <button class="btn btn-primary" style="justify-content:center;" onclick="loginWithPAT()">Connect Securely</button>
+          </div>
+        </div>
+        <div class="tab-panel" id="tab-oauth">
+          <div class="auth-hero" style="padding:20px;">
+            <div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.215 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.28-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
+            <h2>OAuth Device Flow</h2>
+            <p>No token typing needed. Uses official GitHub device authentication.</p>
+          </div>
+          <div class="auth-form">
+            <div class="form-group">
+              <label>OAuth App Client ID</label>
+              <input type="text" id="oauth-client-id" placeholder="Iv23lixxxxxxxxxxxxx">
+              <div class="hint">Create an OAuth App at github.com/settings/developers</div>
+            </div>
+            <div class="security-note">
+              <strong>Secure:</strong> Device flow is the official GitHub way to authenticate without exposing secrets. Your Client ID is public by design.
+            </div>
+            <button class="btn btn-primary" style="justify-content:center;" onclick="startDeviceFlow()">Start Device Login</button>
+            <div id="device-flow-status" style="margin-top:8px; font-size:12px; color:var(--text-secondary); text-align:center;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+window.switchAuthTab = function(btn, tab) {
+  document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+};
+
+async function loginWithPAT() {
+  const token = document.getElementById('pat-input').value.trim();
+  if (!token) { showToast('Please enter a token', 'error'); return; }
+
+  // Verify token
+  const res = await fetch('https://api.github.com/user', {
+    headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' }
+  });
+  if (!res.ok) { showToast('Invalid token', 'error'); return; }
+
+  const user = await res.json();
+  state.token = token;
+  state.user = user;
+  sessionStorage.setItem('gh_token', token);
+  sessionStorage.setItem('gh_user', JSON.stringify(user));
+
+  closeAllModals();
+  updateAuthUI();
+  showToast(`Welcome, ${user.login}!`, 'success');
+  await loadUserRepos();
+}
+
+/* ===================== DEVICE FLOW ===================== */
+async function startDeviceFlow() {
+  const clientId = document.getElementById('oauth-client-id').value.trim();
+  if (!clientId) { showToast('Enter Client ID', 'error'); return; }
+
+  const status = document.getElementById('device-flow-status');
+  status.innerHTML = '<div class="shimmer" style="width:100%;height:16px;"></div>';
+
+  try {
+    // Step 1: Request device code
+    const codeRes = await fetch('https://github.com/login/device/code', {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `client_id=${encodeURIComponent(clientId)}&scope=repo`
+    });
+    const codeData = await codeRes.json();
+    if (codeData.error) throw new Error(codeData.error_description || codeData.error);
+
+    const { device_code, user_code, verification_uri, interval } = codeData;
+    status.innerHTML = `<div style="background:var(--bg-deep); padding:12px; border-radius:8px; border:1px solid var(--border);">
+      <div style="font-size:20px; font-weight:800; font-family:var(--font-mono); letter-spacing:2px; margin-bottom:6px;">${user_code}</div>
+      <div>Enter this code at <a href="${verification_uri}" target="_blank" style="color:var(--accent); font-weight:700;">${verification_uri}</a></div>
+    </div>`;
+
+    // Step 2: Poll for token
+    const poll = setInterval(async () => {
+      const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `client_id=${encodeURIComponent(clientId)}&device_code=${encodeURIComponent(device_code)}&grant_type=urn:ietf:params:oauth:grant-type:device_code`
+      });
+      const tokenData = await tokenRes.json();
+
+      if (tokenData.error === 'authorization_pending') return;
+      if (tokenData.error === 'slow_down') return;
+      if (tokenData.error) { clearInterval(poll); throw new Error(tokenData.error_description || tokenData.error); }
+      if (tokenData.access_token) {
+        clearInterval(poll);
+        state.token = tokenData.access_token;
+        sessionStorage.setItem('gh_token', tokenData.access_token);
+        const userRes = await fetch('https://api.github.com/user', { headers: ghHeaders() });
+        const user = await userRes.json();
+        state.user = user;
+        sessionStorage.setItem('gh_user', JSON.stringify(user));
+        closeAllModals();
+        updateAuthUI();
+        showToast(`Welcome, ${user.login}!`, 'success');
+        await loadUserRepos();
+      }
+    }, (interval || 5) * 1000);
+
+  } catch (err) {
+    status.textContent = err.message;
+    showToast(err.message, 'error');
+  }
+}
+
+function logout() {
+  state.token = null;
+  state.user = null;
+  state.repos = [];
+  state.owner = null;
+  state.repo = null;
+  state.currentPath = '';
+  state.cache.clear();
+  state.activeFile = null;
+  sessionStorage.removeItem('gh_token');
+  sessionStorage.removeItem('gh_user');
+  sessionStorage.removeItem('gh_repos');
+  updateAuthUI();
+  els.sidebar.style.display = 'none';
+  els.mainEmpty.style.display = 'flex';
+  els.preview.innerHTML = '';
+  els.preview.appendChild(els.mainEmpty);
+  showToast('Logged out successfully', 'info');
+}
+
+function updateAuthUI() {
+  if (state.user) {
+    els.topbarRight.innerHTML = `
+      <div class="user-chip">
+        <img src="${state.user.avatar_url}" alt="${state.user.login}">
+        <span>${state.user.login}</span>
+      </div>
+      <button class="btn btn-sm btn-danger" onclick="logout()">Logout</button>
+    `;
+    els.authBtn.style.display = 'none';
+    els.sidebar.style.display = 'flex';
+    els.mainEmpty.style.display = 'none';
+  } else {
+    els.topbarRight.innerHTML = `<button class="btn btn-primary btn-sm" id="auth-btn" onclick="openAuthModal()">Sign In</button>`;
+    els.sidebar.style.display = 'none';
+  }
+}
+
+// Auto-logout on tab close: sessionStorage auto-clears, but also revoke if possible
+window.addEventListener('beforeunload', () => {
+  // sessionStorage is automatically cleared for the session
+  // We cannot make async revoke calls here, but the token is session-only
+});
+
+/* ===================== REPO LIST ===================== */
+async function loadUserRepos() {
+  if (!state.token) return;
+  try {
+    const repos = [];
+    let page = 1;
+    while (page <= 5) {
+      const res = await fetch(`https://api.github.com/user/repos?per_page=100&page=${page}&sort=updated`, {
+        headers: ghHeaders()
+      });
+      if (!res.ok) break;
+      const data = await res.json();
+      if (!data.length) break;
+      repos.push(...data);
+      page++;
+    }
+    state.repos = repos;
+    sessionStorage.setItem('gh_repos', JSON.stringify(repos));
+    if (repos.length > 0) {
+      selectRepo(repos[0].owner.login, repos[0].name);
+    }
+  } catch (e) {
+    showToast(e.message, 'error');
+  }
+}
+
+function openRepoModal() {
+  closeAllModals();
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'repo-modal';
+  overlay.onclick = (e) => { if (e.target === overlay) closeAllModals(); };
+
+  const repos = state.repos.length ? state.repos : [];
+  const html = `
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Your Repositories (${repos.length})</h3>
+        <button class="modal-close" onclick="closeAllModals()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="modal-search" id="repo-search" placeholder="Search your repos...">
+        <div class="repo-list" id="modal-repo-list">
+          ${repos.length === 0 ? '<div style="text-align:center; padding: 20px; color: var(--text-secondary); font-size: 13px;">No repos loaded. Sign in to see your repositories.</div>' : repos.map(r => renderRepoItem(r)).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+
+  const search = document.getElementById('repo-search');
+  if (search) {
+    search.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = repos.filter(r => r.full_name.toLowerCase().includes(q));
+      document.getElementById('modal-repo-list').innerHTML = filtered.map(r => renderRepoItem(r)).join('');
+    });
+    setTimeout(() => search.focus(), 50);
+  }
+}
+
+function renderRepoItem(r) {
+  return `
+    <div class="repo-list-item" onclick="selectRepo('${r.owner.login}', '${r.name}')">
+      <div class="repo-info">
+        <div class="repo-name-row">
+          ${r.full_name}
+          <span class="badge ${r.private ? 'badge-private' : 'badge-public'}">${r.private ? 'Private' : 'Public'}</span>
+        </div>
+        <div class="repo-desc">${escapeHtml(r.description || '')}</div>
+      </div>
+      <div class="repo-stats">
+        ${r.stargazers_count ? '★ ' + r.stargazers_count : ''}
+        ${r.language ? '· ' + r.language : ''}
+      </div>
+    </div>
+  `;
+}
+
+window.selectRepo = function(owner, repo) {
+  state.owner = owner;
+  state.repo = repo;
+  state.currentPath = '';
+  state.cache.clear();
+  state.activeFile = null;
+  els.currentRepoName.textContent = `${owner}/${repo}`;
+  closeAllModals();
+  window.navigateTo('');
+};
+
+window.closeAllModals = function() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.remove());
+};
+
+/* ===================== FILE TYPE ===================== */
 function getFileCategory(name) {
   const lower = name.toLowerCase();
   const ext = lower.includes('.') ? lower.split('.').pop() : '';
-
   const noExtNames = ['dockerfile','makefile','license','readme','changelog','authors','copying','gemfile','rakefile','gemfile.lock'];
   const hasNoRealExt = !ext || noExtNames.some(n => lower === n || lower.startsWith(n+'.'));
 
   if (hasNoRealExt) {
-    if (lower === 'license' || lower === 'readme' || lower === 'changelog' || lower === 'copying' || lower === 'authors')
+    if (['license','readme','changelog','copying','authors'].includes(lower))
       return { type: 'text', icon: 'text', lang: 'text' };
     return { type: 'code', icon: 'code', lang: 'text' };
   }
@@ -1064,7 +1680,6 @@ function getFileCategory(name) {
   if (codeExts.includes(ext))  return { type: 'code',  icon: 'code',  lang: ext };
   if (textExts.includes(ext))  return { type: 'text',  icon: 'text',  lang: 'text' };
   if (ext === 'pdf')           return { type: 'pdf',   icon: 'pdf',   lang: null };
-
   return { type: 'binary', icon: 'binary', lang: null };
 }
 
@@ -1091,27 +1706,29 @@ async function fetchDirectory(path) {
   if (state.cache.has(key)) return state.cache.get(key);
 
   const api = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}`;
-  const res = await fetch(api);
+  const res = await fetch(api, { headers: ghHeaders() });
 
   const remaining = res.headers.get('x-ratelimit-remaining');
   const limit = res.headers.get('x-ratelimit-limit');
   if (remaining) {
     const low = parseInt(remaining) < 10;
-    els.rateLimit.innerHTML = `<div class="dot" style="background:${low?'var(--danger)':'var(--success)'};box-shadow:0 0 8px currentColor;"></div><span>API: ${remaining}/${limit} left</span>`;
+    els.rateLimit.innerHTML = `<div class="dot" style="background:${low?'var(--danger)':'var(--success')}"></div><span>API: ${remaining}/${limit}</span>`;
   }
 
+  if (res.status === 401) throw new Error('Unauthorized. Check your token or repo access.');
   if (res.status === 403) {
     const body = await res.json().catch(()=>({}));
     if (body.message && body.message.includes('rate limit')) {
       const reset = res.headers.get('x-ratelimit-reset');
       const time = reset ? new Date(parseInt(reset)*1000).toLocaleTimeString() : 'soon';
-      throw new Error(`GitHub API rate limit exceeded. Resets at ${time}.`);
+      throw new Error(`Rate limit exceeded. Resets at ${time}.`);
     }
   }
+  if (res.status === 404) throw new Error('Repository or path not found. Check URL or permissions.');
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
 
   const data = await res.json();
-  if (!Array.isArray(data)) throw new Error('Unexpected response format');
+  if (!Array.isArray(data)) throw new Error('Unexpected response');
 
   state.cache.set(key, data);
   state.allItems = data;
@@ -1154,7 +1771,6 @@ function renderFileList(items) {
   }
 }
 
-/* ===================== FILTER ===================== */
 els.fileFilter.addEventListener('input', (e) => {
   const q = e.target.value.toLowerCase().trim();
   if (!state.allItems.length) return;
@@ -1182,14 +1798,15 @@ async function openFile(item) {
         <div class="preview-meta">${formatBytes(item.size)} &bull; ${info.type.toUpperCase()}</div>
       </div>
       <div class="preview-actions">
-        <button onclick="window.open('${htmlUrl}','_blank')">Open on GitHub</button>
+        <button onclick="copyCode()" id="copy-code-btn" style="display:none;">Copy</button>
+        <button onclick="window.open('${htmlUrl}','_blank')">GitHub</button>
         <button onclick="window.open('${downloadUrl}','_blank')">Download</button>
         ${info.type === 'html' ? `<button onclick="openHtmlLiveEditorFromFile('${downloadUrl}')">Live Editor</button>` : ''}
       </div>
     </div>
     <div class="preview-content ${info.type}" id="pc">
-      <div style="padding:40px;text-align:center;color:var(--text-secondary);">
-        <div class="shimmer" style="width:40px;height:40px;margin:0 auto 16px;border-radius:50%;"></div>
+      <div style="padding:32px;text-align:center;color:var(--text-secondary);">
+        <div class="shimmer" style="width:32px;height:32px;margin:0 auto 12px;border-radius:50%;"></div>
         Loading preview…
       </div>
     </div>
@@ -1202,27 +1819,27 @@ async function openFile(item) {
       pc.innerHTML = `
         <div class="binary">
           <div class="big-icon">📦</div>
-          <p>File is too large to preview safely.</p>
-          <p style="font-size:12px;margin-top:6px;color:var(--text-tertiary);">${formatBytes(item.size)}</p>
-          <a href="${downloadUrl}" target="_blank">Download File</a>
+          <p>File too large to preview.</p>
+          <p style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">${formatBytes(item.size)}</p>
+          <a href="${downloadUrl}" target="_blank">Download</a>
         </div>`;
       return;
     }
 
     if (info.type === 'image') {
-      pc.innerHTML = `<img src="${downloadUrl}" alt="${escapeHtml(item.name)}" onload="this.style.opacity=1" style="opacity:0;transition:opacity .5s ease;">`;
+      pc.innerHTML = `<img src="${downloadUrl}" alt="${escapeHtml(item.name)}" onclick="zoomImage(this)" onload="this.style.opacity=1" style="opacity:0;transition:opacity .4s ease;">`;
     }
     else if (info.type === 'audio') {
       pc.innerHTML = `<audio controls src="${downloadUrl}" preload="metadata"></audio>`;
     }
     else if (info.type === 'video') {
-      pc.innerHTML = `<video controls src="${downloadUrl}" preload="metadata" style="max-width:100%;max-height:72vh;border-radius:var(--radius);"></video>`;
+      pc.innerHTML = `<video controls src="${downloadUrl}" preload="metadata" style="max-width:100%;max-height:70vh;border-radius:var(--radius);"></video>`;
     }
     else if (info.type === 'pdf') {
       pc.innerHTML = `<iframe src="${downloadUrl}" sandbox="allow-same-origin"></iframe>`;
     }
     else if (['text','code','html','markdown'].includes(info.type)) {
-      const res = await fetch(downloadUrl);
+      const res = await fetch(downloadUrl, { headers: state.token ? ghHeaders() : {} });
       if (!res.ok) throw new Error('Failed to fetch raw file');
       const text = await res.text();
 
@@ -1239,26 +1856,25 @@ async function openFile(item) {
             <button class="tab-btn" onclick="switchHtmlTab(event,'preview')">Preview</button>
             <button class="tab-btn" onclick="switchHtmlTab(event,'live')">Live Editor</button>
           </div>
-          <div class="tab-body" id="html-source"><pre><code class="language-markup">${safeText}</code></pre></div>
+          <div class="tab-body" id="html-source"><div class="code-header"><span>HTML</span></div><pre><code class="language-markup">${safeText}</code></pre></div>
           <div class="tab-body" id="html-preview" style="display:none;padding:0;">
-            <iframe sandbox="allow-scripts" style="width:100%;height:72vh;border:none;background:#fff;" id="html-preview-frame"></iframe>
+            <iframe sandbox="allow-scripts" style="width:100%;height:68vh;border:none;background:#fff;" id="html-preview-frame"></iframe>
           </div>
           <div class="tab-body" id="html-live" style="display:none;padding:0;"></div>
         `;
         window.__htmlPreviewText = text;
         setTimeout(() => {
           const frame = document.getElementById('html-preview-frame');
-          if (frame) {
-            const blob = new Blob([text], {type: 'text/html'});
-            frame.src = URL.createObjectURL(blob);
-          }
+          if (frame) { const blob = new Blob([text], {type: 'text/html'}); frame.src = URL.createObjectURL(blob); }
         }, 0);
         Prism.highlightAll();
+        document.getElementById('copy-code-btn').style.display = '';
       }
       else {
         const langClass = info.lang ? `language-${mapPrismLang(info.lang)}` : 'language-text';
-        pc.innerHTML = `<pre><code class="${langClass}">${escapeHtml(text)}</code></pre>`;
+        pc.innerHTML = `<div class="code-header"><span>${mapPrismLang(info.lang).toUpperCase()}</span></div><pre><code class="${langClass}">${escapeHtml(text)}</code></pre>`;
         Prism.highlightAll();
+        document.getElementById('copy-code-btn').style.display = '';
       }
     }
     else {
@@ -1266,14 +1882,29 @@ async function openFile(item) {
         <div class="binary">
           <div class="big-icon">📦</div>
           <p>Binary file</p>
-          <p style="font-size:12px;margin-top:6px;color:var(--text-tertiary);">${escapeHtml(item.name)}</p>
-          <a href="${downloadUrl}" target="_blank">Download File</a>
+          <p style="font-size:11px;margin-top:4px;color:var(--text-tertiary);">${escapeHtml(item.name)}</p>
+          <a href="${downloadUrl}" target="_blank">Download</a>
         </div>`;
     }
   } catch (err) {
-    pc.innerHTML = `<div class="binary" style="color:var(--danger);"><div class="big-icon">⚠️</div><p>Error loading preview</p><p style="font-size:12px;margin-top:6px;">${escapeHtml(err.message)}</p></div>`;
+    pc.innerHTML = `<div class="binary" style="color:var(--danger);"><div class="big-icon">⚠️</div><p>Error loading preview</p><p style="font-size:11px;margin-top:4px;">${escapeHtml(err.message)}</p></div>`;
   }
 }
+
+window.copyCode = function() {
+  const code = document.querySelector('.preview-content pre code');
+  if (code) {
+    navigator.clipboard.writeText(code.textContent).then(() => showToast('Copied!', 'success'));
+  }
+};
+
+window.zoomImage = function(img) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:zoom-out;animation:fadeIn 0.2s ease;';
+  overlay.innerHTML = `<img src="${img.src}" style="max-width:95%;max-height:95%;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">`;
+  overlay.onclick = () => overlay.remove();
+  document.body.appendChild(overlay);
+};
 
 /* ===================== HTML TABS ===================== */
 window.switchHtmlTab = function(ev, name) {
@@ -1283,17 +1914,7 @@ window.switchHtmlTab = function(ev, name) {
   document.getElementById('html-preview').style.display = name==='preview' ? 'block' : 'none';
   const liveDiv = document.getElementById('html-live');
   liveDiv.style.display = name==='live' ? 'block' : 'none';
-
-  if (name==='preview') {
-    const frame = document.getElementById('html-preview-frame');
-    if (window.__htmlPreviewText && !frame.src) {
-      const blob = new Blob([window.__htmlPreviewText], {type: 'text/html'});
-      frame.src = URL.createObjectURL(blob);
-    }
-  }
-  if (name==='live') {
-    renderHtmlLiveEditor(liveDiv, window.__htmlPreviewText || '');
-  }
+  if (name==='live') renderHtmlLiveEditor(liveDiv, window.__htmlPreviewText || '');
 };
 
 /* ===================== HTML LIVE EDITOR ===================== */
@@ -1303,24 +1924,24 @@ function renderHtmlLiveEditor(container, initialCode) {
     <div class="html-live-editor">
       <div class="html-live-toolbar">
         <div class="left-actions">
-          <label>HTML Live Editor</label>
-          <span class="perm-badge" id="perm-sandbox" title="Sandboxed iframe with allow-scripts">SandBoxed</span>
+          <label>Live Editor</label>
+          <span class="perm-badge">Sandboxed</span>
         </div>
         <div class="right-actions">
-          <button onclick="toggleHtmlLiveSplit()" id="btn-split" title="Toggle split view">Split</button>
+          <button onclick="toggleHtmlLiveSplit()" id="btn-split">Split</button>
           <button onclick="refreshHtmlLivePreview()" class="primary">Run</button>
-          <button onclick="requestHtmlPermissions()" title="Request permissions (geolocation, camera, mic, notifications)">Permissions</button>
+          <button onclick="requestHtmlPermissions()">Permissions</button>
         </div>
       </div>
-      <div class="html-live-panes ${state.htmlLiveSplit ? 'split' : ''}" id="html-live-panes">
+      <div class="html-live-panes split" id="html-live-panes">
         <div class="pane-code">
-          <textarea id="html-live-code" placeholder="Paste your HTML/JS/CSS here..." spellcheck="false">${escapeHtml(state.htmlLiveText)}</textarea>
+          <textarea id="html-live-code" placeholder="Paste HTML/JS/CSS..." spellcheck="false">${escapeHtml(state.htmlLiveText)}</textarea>
         </div>
         <div class="pane-preview">
           <iframe id="html-live-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-pointer-lock" allow="geolocation; microphone; camera; notifications; fullscreen; payment; midi; encrypted-media; display-capture; autoplay" allowfullscreen></iframe>
           <div class="preview-overlay" id="html-live-overlay">
-            <div style="font-size:32px;opacity:.4;">▶</div>
-            <p>Click "Run" to execute your HTML/JS</p>
+            <div style="font-size:28px;opacity:.4;">▶</div>
+            <p>Click "Run" to execute</p>
           </div>
         </div>
       </div>
@@ -1328,105 +1949,46 @@ function renderHtmlLiveEditor(container, initialCode) {
   `;
 
   const codeArea = document.getElementById('html-live-code');
-  codeArea.addEventListener('input', (e) => {
-    state.htmlLiveText = e.target.value;
-  });
+  codeArea.addEventListener('input', (e) => { state.htmlLiveText = e.target.value; });
   codeArea.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
+    if (e.key === 'Tab') { e.preventDefault();
       const start = codeArea.selectionStart;
-      const end = codeArea.selectionEnd;
-      codeArea.value = codeArea.value.substring(0, start) + '  ' + codeArea.value.substring(end);
+      codeArea.value = codeArea.value.substring(0, start) + '  ' + codeArea.value.substring(codeArea.selectionEnd);
       codeArea.selectionStart = codeArea.selectionEnd = start + 2;
       state.htmlLiveText = codeArea.value;
     }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-      refreshHtmlLivePreview();
-    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); refreshHtmlLivePreview(); }
   });
 }
 
 window.toggleHtmlLiveSplit = function() {
   state.htmlLiveSplit = !state.htmlLiveSplit;
-  const panes = document.getElementById('html-live-panes');
-  if (panes) panes.classList.toggle('split', state.htmlLiveSplit);
-  const btn = document.getElementById('btn-split');
-  if (btn) btn.textContent = state.htmlLiveSplit ? 'Split' : 'Full';
+  document.getElementById('html-live-panes').classList.toggle('split', state.htmlLiveSplit);
+  document.getElementById('btn-split').textContent = state.htmlLiveSplit ? 'Split' : 'Full';
 };
 
 window.refreshHtmlLivePreview = function() {
   const frame = document.getElementById('html-live-frame');
   const overlay = document.getElementById('html-live-overlay');
-  const code = state.htmlLiveText;
   if (!frame) return;
-
   if (overlay) overlay.style.display = 'none';
-
-  const bridge = "<script>" +
-    "(function(){" +
-      "window.__repoViewerPermissions = {};" +
-      "window.requestRepoPermission = function(type) {" +
-        "return parent.postMessage({type:'REQ_PERM', perm:type}, '*');" +
-      "};" +
-      "if (navigator.geolocation) {" +
-        "const orig = navigator.geolocation.getCurrentPosition;" +
-        "navigator.geolocation.getCurrentPosition = function(cb, err, opts) {" +
-          "parent.postMessage({type:'REQ_PERM', perm:'geolocation'}, '*');" +
-          "return orig.call(navigator.geolocation, cb, err, opts);" +
-        "};" +
-      "}" +
-      "const origNotify = window.Notification?.requestPermission;" +
-      "if (origNotify) {" +
-        "window.Notification.requestPermission = function() {" +
-          "parent.postMessage({type:'REQ_PERM', perm:'notifications'}, '*');" +
-          "return origNotify.call(window.Notification);" +
-        "};" +
-      "}" +
-      "if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {" +
-        "const origGUM = navigator.mediaDevices.getUserMedia;" +
-        "navigator.mediaDevices.getUserMedia = function(c) {" +
-          "parent.postMessage({type:'REQ_PERM', perm:'camera,microphone'}, '*');" +
-          "return origGUM.call(navigator.mediaDevices, c);" +
-        "};" +
-      "}" +
-    "})();" +
-  "<\/script>";
-
-  const finalHtml = code.includes('<html') ? code : bridge + code;
-  const blob = new Blob([finalHtml], {type: 'text/html'});
+  const blob = new Blob([state.htmlLiveText], {type: 'text/html'});
   frame.src = URL.createObjectURL(blob);
   showToast('Preview refreshed', 'success');
 };
 
 window.requestHtmlPermissions = async function() {
   const perms = [];
-  try {
-    const result = await navigator.permissions.query({name:'geolocation'});
-    perms.push('Geolocation: ' + result.state);
-  } catch(e) { perms.push('Geolocation: not supported'); }
-
-  try {
-    const result = await navigator.permissions.query({name:'notifications'});
-    perms.push('Notifications: ' + result.state);
-  } catch(e) { perms.push('Notifications: not supported'); }
-
-  try {
-    const result = await navigator.permissions.query({name:'camera'});
-    perms.push('Camera: ' + result.state);
-  } catch(e) { perms.push('Camera: not supported'); }
-
-  try {
-    const result = await navigator.permissions.query({name:'microphone'});
-    perms.push('Microphone: ' + result.state);
-  } catch(e) { perms.push('Microphone: not supported'); }
-
+  try { const r = await navigator.permissions.query({name:'geolocation'}); perms.push('Geo: ' + r.state); } catch(e) { perms.push('Geo: N/A'); }
+  try { const r = await navigator.permissions.query({name:'notifications'}); perms.push('Notify: ' + r.state); } catch(e) { perms.push('Notify: N/A'); }
+  try { const r = await navigator.permissions.query({name:'camera'}); perms.push('Cam: ' + r.state); } catch(e) { perms.push('Cam: N/A'); }
+  try { const r = await navigator.permissions.query({name:'microphone'}); perms.push('Mic: ' + r.state); } catch(e) { perms.push('Mic: N/A'); }
   showToast(perms.join(' | '), 'info');
 };
 
 window.openHtmlLiveEditorFromFile = async function(url) {
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { headers: state.token ? ghHeaders() : {} });
     const text = await res.text();
     state.htmlLiveText = text;
     const liveDiv = document.getElementById('html-live');
@@ -1440,28 +2002,8 @@ window.openHtmlLiveEditorFromFile = async function(url) {
       renderHtmlLiveEditor(liveDiv, text);
       setTimeout(refreshHtmlLivePreview, 100);
     }
-  } catch (err) {
-    showToast('Failed to load: ' + err.message, 'error');
-  }
+  } catch (err) { showToast('Failed: ' + err.message, 'error'); }
 };
-
-window.addEventListener('message', async (e) => {
-  if (e.data && e.data.type === 'REQ_PERM') {
-    const perm = e.data.perm;
-    showToast('Page requested: ' + perm, 'info');
-    if (perm.includes('geolocation')) {
-      navigator.geolocation.getCurrentPosition(()=>{}, ()=>{});
-    }
-    if (perm.includes('notifications') && window.Notification) {
-      window.Notification.requestPermission();
-    }
-    if (perm.includes('camera') || perm.includes('microphone')) {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({video: perm.includes('camera'), audio: perm.includes('microphone')}).catch(()=>{});
-      }
-    }
-  }
-});
 
 /* ===================== NAVIGATION ===================== */
 window.navigateTo = async function(path) {
@@ -1469,21 +2011,21 @@ window.navigateTo = async function(path) {
   state.activeFile = null;
   els.fileFilter.value = '';
   renderBreadcrumb();
-  els.fileList.innerHTML = '<div style="padding:24px;color:var(--text-secondary);text-align:center;"><div class="shimmer" style="width:100%;height:20px;margin-bottom:8px;border-radius:6px;"></div><div class="shimmer" style="width:80%;height:20px;border-radius:6px;"></div></div>';
+  els.fileList.innerHTML = '<div style="padding:20px;color:var(--text-secondary);text-align:center;"><div class="shimmer" style="width:100%;height:16px;margin-bottom:6px;border-radius:4px;"></div><div class="shimmer" style="width:75%;height:16px;border-radius:4px;"></div></div>';
   try {
     const items = await fetchDirectory(path);
     state.allItems = items;
     renderFileList(items);
     els.preview.innerHTML = `
       <div class="empty-state">
-        <div class="hero-icon" style="width:72px;height:72px;border-radius:20px;">
-          <svg viewBox="0 0 24 24" width="32" height="32"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
+        <div class="hero-icon" style="width:56px;height:56px;border-radius:14px;">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
         </div>
         <h2>Folder</h2>
-        <p>Select a file from the sidebar to preview its contents.</p>
+        <p>Select a file to preview.</p>
       </div>`;
   } catch (e) {
-    els.fileList.innerHTML = `<div style="padding:24px;color:var(--danger);text-align:center;">${escapeHtml(e.message)}</div>`;
+    els.fileList.innerHTML = `<div style="padding:20px;color:var(--danger);text-align:center;font-size:12.5px;">${escapeHtml(e.message)}</div>`;
     showToast(e.message, 'error');
   }
 };
@@ -1491,46 +2033,25 @@ window.navigateTo = async function(path) {
 /* ===================== INIT ===================== */
 els.loadBtn.addEventListener('click', () => {
   const parsed = parseGitHubUrl(els.repoUrl.value);
-  if (!parsed) {
-    showToast('Invalid GitHub URL. Example: https://github.com/Timeness/Genis', 'error');
-    return;
-  }
-  state.owner = parsed.owner;
-  state.repo = parsed.repo;
-  state.currentPath = '';
-  state.cache.clear();
-  state.activeFile = null;
-  els.repoMeta.textContent = `${parsed.owner} / ${parsed.repo}`;
-  showToast(`Loaded ${parsed.owner}/${parsed.repo}`, 'success');
-  window.navigateTo('');
+  if (!parsed) { showToast('Invalid GitHub URL', 'error'); return; }
+  selectRepo(parsed.owner, parsed.repo);
 });
 
 els.repoUrl.addEventListener('keydown', e => { if (e.key==='Enter') els.loadBtn.click(); });
 
-document.body.addEventListener('dragover', e => { e.preventDefault(); });
-document.body.addEventListener('drop', e => {
-  e.preventDefault();
-  const text = e.dataTransfer.getData('text');
-  if (text && text.includes('github.com')) {
-    els.repoUrl.value = text;
-    els.loadBtn.click();
-  }
-});
-
 document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    els.fileFilter.focus();
-  }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
-    e.preventDefault();
-    els.repoUrl.focus();
-    els.repoUrl.select();
-  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); els.fileFilter.focus(); }
 });
 
-if (els.repoUrl.value.trim()) {
-  setTimeout(() => els.loadBtn.click(), 300);
+// Restore session on load
+if (state.token && state.user) {
+  updateAuthUI();
+  if (state.repos.length) {
+    els.sidebar.style.display = 'flex';
+    els.mainEmpty.style.display = 'none';
+  } else {
+    loadUserRepos();
+  }
 }
 </script>
 </body>
