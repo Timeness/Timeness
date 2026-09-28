@@ -1,6 +1,6 @@
 # Hi, I'm Timeness
 
-**I love coding and I'm a self learner. Proud to be a coder.**
+**I love coding and i'm a self learner. Proud to be a coder.**
 
 > Life is too short, live like a king.
 
