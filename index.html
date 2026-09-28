@@ -28,6 +28,7 @@
 <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 
 <style>
 :root {
@@ -73,6 +74,11 @@ body { background: var(--bg); color: var(--text-primary); font-family: var(--fon
 .btn-danger:hover { background: var(--danger-hover); border-color: var(--danger-hover); }
 .btn-ghost { background: transparent; border-color: transparent; color: var(--text-secondary); }
 .btn-ghost:hover { background: var(--bg-deep); color: var(--text-primary); }
+/* Sync control — additive only; existing UI is unchanged */
+.sync-btn { min-width: 58px; }
+.sync-btn.syncing .iconify { animation: spinSync 0.8s linear infinite; }
+@keyframes spinSync { to { transform: rotate(360deg); } }
+
 
 /* Workspace */
 .workspace { display: flex; flex: 1; overflow: hidden; }
@@ -229,6 +235,98 @@ body { background: var(--bg); color: var(--text-primary); font-family: var(--fon
 
 /* Responsive */
 @media (max-width: 800px) { .workspace { flex-direction: column; } .sidebar { width: 100%; height: 35%; min-height: 180px; border-right: none; border-bottom: 1px solid var(--border); } .preview { padding: 12px; } }
+/* Desktop-only workspace and compact repository feature rail */
+.feature-rail { padding: 8px 10px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; }
+.feature-rail button { min-width: 0; display: flex; align-items: center; justify-content: flex-start; gap: 5px; padding: 6px 7px; border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); font: 600 10.5px var(--font-ui); cursor: pointer; white-space: nowrap; }
+.feature-rail button:hover { background: var(--accent-weak); color: var(--accent); border-color: var(--border); }
+.feature-rail .iconify { margin: 0; flex: 0 0 auto; }
+.sidebar { position: relative; }
+.sidebar-resize-handle { position:absolute; z-index:5; top:0; right:-3px; width:6px; height:100%; cursor:col-resize; }
+.theme-dark { --bg:#111827; --bg-deep:#0b1220; --surface:#172033; --surface-hover:#1e293b; --surface-raised:#1e293b; --border:#334155; --border-hover:#475569; --text-primary:#e5e7eb; --text-secondary:#aab5c5; --text-tertiary:#718096; --accent-weak:rgba(96,165,250,.12); --accent-glow:rgba(96,165,250,.2); }
+.theme-dark .pane-code textarea { background:#0b1220; }
+.mobile-block { display: none; }
+@media (max-width: 800px), (hover: none) and (pointer: coarse) {
+  .app { display: none !important; }
+  .mobile-block { position: fixed; inset: 0; z-index: 20000; display: flex; align-items: center; justify-content: center; padding: 28px; background: var(--bg); color: var(--text-primary); text-align: center; }
+  .mobile-block-inner { max-width: 420px; }
+  .mobile-block .iconify { display: block; margin: 0 auto 18px; color: var(--accent); font-size: 42px; }
+  .mobile-block h1 { font-size: 22px; margin-bottom: 8px; }
+  .mobile-block p { color: var(--text-secondary); line-height: 1.7; }
+}
+.feature-dashboard { margin-bottom: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.dashboard-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.dashboard-head strong { font-size:14px; }
+.dashboard-stats { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; }
+.dashboard-stat { padding:8px 10px; border-left:2px solid var(--accent); background:var(--bg-deep); min-width:0; }
+.dashboard-stat span { display:block; color:var(--text-tertiary); font-size:10px; text-transform:uppercase; }
+.dashboard-stat strong { display:block; margin-top:2px; font:600 13px var(--font-mono); overflow:hidden; text-overflow:ellipsis; }
+.dashboard-languages { display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--text-secondary); font-size:11px; flex-wrap:wrap; }
+.language-chip { padding:3px 7px; border:1px solid var(--border); border-radius:4px; }
+.feature-content { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-sm); }
+.feature-dashboard { margin-bottom:12px; padding:14px 16px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-sm); }
+.dashboard-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.dashboard-stats { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; }
+.dashboard-stat { padding:8px 10px; border-left:2px solid var(--accent); background:var(--bg-deep); min-width:0; }
+.dashboard-stat span { display:block; color:var(--text-tertiary); font-size:10px; text-transform:uppercase; }
+.dashboard-stat strong { display:block; margin-top:2px; font:600 13px var(--font-mono); }
+.dashboard-languages { display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--text-secondary); font-size:11px; flex-wrap:wrap; }
+.language-chip { padding:3px 7px; border:1px solid var(--border); border-radius:4px; }
+.feature-content-header { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.feature-content-header h2 { font-size:14px; }
+.feature-form { padding:16px; display:grid; gap:10px; }
+.feature-form input,.feature-form textarea,.feature-form select { width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg-deep); color:var(--text-primary); font:12px var(--font-ui); }
+.feature-form textarea { min-height:150px; resize:vertical; font:12px/1.6 var(--font-mono); }
+.feature-form .form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.feature-form[style*="auto-fill"] { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important; }
+.feature-list { padding:8px 16px; }
+.feature-list-item { padding:10px 0; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.feature-list-item:last-child { border-bottom:0; }
+.feature-list-item strong { display:block; }
+.feature-list-item small { display:block; margin-top:3px; color:var(--text-secondary); }
+.diff-grid { display:grid; grid-template-columns:1fr 1fr; min-width:600px; }
+.diff-file { border-top:1px solid var(--border); overflow:auto; }
+.diff-file-name { padding:8px 12px; background:var(--bg-deep); font:600 11px var(--font-mono); border-bottom:1px solid var(--border); }
+.diff-lines { margin:0; padding:8px 12px; font:11px/1.65 var(--font-mono); white-space:pre; }
+.diff-line-add { background:rgba(16,185,129,.13); color:#047857; }
+.diff-line-remove { background:rgba(239,68,68,.12); color:#b91c1c; }
+.palette-overlay { align-items:flex-start; padding-top:min(18vh,150px); }
+.palette-modal { width:min(620px,92vw); background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow-lg); overflow:hidden; }
+.palette-modal input { width:100%; border:0; border-bottom:1px solid var(--border); outline:0; padding:16px; font:14px var(--font-ui); background:var(--surface); color:var(--text-primary); }
+.palette-results { max-height:55vh; overflow:auto; padding:6px; }
+.palette-item { display:flex; justify-content:space-between; width:100%; padding:9px 10px; border:0; border-radius:4px; background:transparent; color:var(--text-primary); text-align:left; font:12px var(--font-ui); cursor:pointer; }
+.palette-item:hover,.palette-item.active { background:var(--accent-weak); }
+.palette-item small { color:var(--text-tertiary); }
+.zen-mode .topbar,.zen-mode .sidebar { display:none !important; }
+.zen-mode .workspace { height:100vh; }
+.theme-dark { color-scheme:dark; }
+@media (max-width: 1050px) { .dashboard-stats { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+.feature-content-header { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.feature-content-header h2 { font-size:14px; }
+.feature-form { padding:16px; display:grid; gap:10px; }
+.feature-form input,.feature-form textarea,.feature-form select { width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--bg-deep); color:var(--text-primary); font:12px var(--font-ui); }
+.feature-form textarea { min-height:180px; resize:vertical; font:12px/1.6 var(--font-mono); }
+.feature-form .form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.feature-list { padding:8px 16px; }
+.feature-list-item { padding:10px 0; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.feature-list-item:last-child { border-bottom:0; }
+.feature-list-item strong { display:block; }
+.feature-list-item small { display:block; margin-top:3px; color:var(--text-secondary); }
+.diff-grid { display:grid; grid-template-columns:1fr 1fr; min-width:600px; }
+.diff-file { border-top:1px solid var(--border); overflow:auto; }
+.diff-file-name { padding:8px 12px; background:var(--bg-deep); font:600 11px var(--font-mono); border-bottom:1px solid var(--border); }
+.diff-lines { margin:0; padding:8px 12px; font:11px/1.65 var(--font-mono); white-space:pre; }
+.diff-line-add { background:rgba(16,185,129,.13); color:#047857; }
+.diff-line-remove { background:rgba(239,68,68,.12); color:#b91c1c; }
+.palette-overlay { align-items:flex-start; padding-top:min(18vh,150px); }
+.palette-modal { width:min(620px,92vw); background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow-lg); overflow:hidden; }
+.palette-modal input { width:100%; border:0; border-bottom:1px solid var(--border); outline:0; padding:16px; font:14px var(--font-ui); background:var(--surface); color:var(--text-primary); }
+.palette-results { max-height:55vh; overflow:auto; padding:6px; }
+.palette-item { display:flex; justify-content:space-between; width:100%; padding:9px 10px; border:0; border-radius:4px; background:transparent; color:var(--text-primary); text-align:left; font:12px var(--font-ui); cursor:pointer; }
+.palette-item:hover,.palette-item.active { background:var(--accent-weak); }
+.palette-item small { color:var(--text-tertiary); }
+.zen-mode .topbar,.zen-mode .sidebar { display:none !important; }
+.zen-mode .workspace { height:100vh; }
+@media (max-width: 1050px) { .dashboard-stats { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 
 .code-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--bg-deep); border-bottom: 1px solid var(--border); font-size: 11.5px; font-weight: 600; color: var(--text-secondary); font-family: var(--font-mono); }
@@ -294,10 +392,28 @@ body { background: var(--bg); color: var(--text-primary); font-family: var(--fon
       </div>
       <div class="sidebar-toolbar">
         <div class="sidebar-search" style="flex:1;">
-          <input type="text" id="file-filter" placeholder="Filter files... (Ctrl+K)">
+          <input type="text" id="file-filter" placeholder="Filter files...">
         </div>
         <button class="btn btn-sm btn-ghost" id="bulk-mode-btn" onclick="toggleBulkMode()" title="Bulk select mode"><span class="iconify" data-icon="mdi:checkbox-blank-outline"></span></button>
       </div>
+      <nav class="feature-rail" aria-label="Repository tools">
+        <button onclick="showDashboard()"><span class="iconify" data-icon="mdi:view-dashboard-outline"></span>Dashboard</button>
+        <button onclick="showEditor()"><span class="iconify" data-icon="mdi:code-braces"></span>Editor</button>
+        <button onclick="showDiff()"><span class="iconify" data-icon="mdi:compare-horizontal"></span>Diff</button>
+        <button onclick="showBranches()"><span class="iconify" data-icon="mdi:source-branch"></span>Branches</button>
+        <button onclick="showCommits()"><span class="iconify" data-icon="mdi:history"></span>Commits</button>
+        <button onclick="showIssues()"><span class="iconify" data-icon="mdi:alert-circle-outline"></span>Issues</button>
+        <button onclick="showPullRequests()"><span class="iconify" data-icon="mdi:source-pull"></span>Pull requests</button>
+        <button onclick="showCreateFile()"><span class="iconify" data-icon="mdi:file-plus-outline"></span>New file</button>
+        <button onclick="showCreateFolder()"><span class="iconify" data-icon="mdi:folder-plus-outline"></span>New folder</button>
+        <button onclick="showUploadFiles()"><span class="iconify" data-icon="mdi:upload"></span>Upload</button>
+        <button onclick="showCodeSearch()"><span class="iconify" data-icon="mdi:magnify"></span>Code search</button>
+        <button onclick="showDependencies()"><span class="iconify" data-icon="mdi:package-variant-closed"></span>Dependencies</button>
+        <button onclick="showImageGallery()"><span class="iconify" data-icon="mdi:image-multiple-outline"></span>Images</button>
+        <button onclick="showReadme()"><span class="iconify" data-icon="mdi:book-open-page-variant-outline"></span>README</button>
+        <button onclick="toggleZenMode()"><span class="iconify" data-icon="mdi:fullscreen"></span>Zen mode</button>
+        <button onclick="openCommandPalette()"><span class="iconify" data-icon="mdi:lightning-bolt-outline"></span>Commands</button>
+      </nav>
       <div class="file-list" id="file-list">
         <div class="empty-state" style="opacity:.6; padding: 40px 20px;">
           <svg viewBox="0 0 24 24" fill="currentColor" width="36" height="36"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h16v12z"/></svg>
@@ -326,6 +442,14 @@ body { background: var(--bg); color: var(--text-primary); font-family: var(--fon
   </div>
 </div>
 
+<section class="mobile-block" aria-label="Desktop only">
+  <div class="mobile-block-inner">
+    <span class="iconify" data-icon="mdi:monitor-lock"></span>
+    <h1>Desktop only</h1>
+    <p>GitView is available on desktop devices. Mobile browsers, including desktop mode, are not supported.</p>
+  </div>
+</section>
+
 <div class="toast-container" id="toast-container"></div>
 
 <script>
@@ -346,7 +470,7 @@ const ICONS = {
 
 /* ===================== STATE ===================== */
 const state = {
-  token: sessionStorage.getItem('gh_token') || null,
+  token: null,
   user: JSON.parse(sessionStorage.getItem('gh_user') || 'null'),
   repos: JSON.parse(sessionStorage.getItem('gh_repos') || '[]'),
   owner: null,
@@ -359,6 +483,8 @@ const state = {
   htmlLiveSplit: true,
   bulkMode: false,
   selectedFiles: new Set(),
+  pathHistory: [],
+  pathHistoryIndex: -1,
 };
 
 const els = {
@@ -424,7 +550,116 @@ function ghHeaders() {
   return h;
 }
 
+
+/* ===================== ENCRYPTED TOKEN STORAGE ===================== */
+/*
+ * Token is encrypted with AES-GCM before being written to localStorage.
+ * The non-extractable CryptoKey is kept in IndexedDB, so plaintext PAT/OAuth
+ * tokens are not stored in localStorage/sessionStorage.
+ */
+const TOKEN_VAULT = {
+  dbName: 'gitview_secure_vault',
+  storeName: 'keys',
+  keyId: 'github-token-key',
+  cipherKey: 'gitview_encrypted_token'
+};
+
+function openTokenVaultDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(TOKEN_VAULT.dbName, 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(TOKEN_VAULT.storeName)) {
+        db.createObjectStore(TOKEN_VAULT.storeName);
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('IndexedDB unavailable'));
+  });
+}
+
+async function getVaultKey() {
+  const db = await openTokenVaultDB();
+  const existing = await new Promise((resolve, reject) => {
+    const tx = db.transaction(TOKEN_VAULT.storeName, 'readonly');
+    const req = tx.objectStore(TOKEN_VAULT.storeName).get(TOKEN_VAULT.keyId);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+  if (existing) { db.close(); return existing; }
+
+  const key = await crypto.subtle.generateKey(
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction(TOKEN_VAULT.storeName, 'readwrite');
+    tx.objectStore(TOKEN_VAULT.storeName).put(key, TOKEN_VAULT.keyId);
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+  });
+  db.close();
+  return key;
+}
+
+function bytesToBase64(bytes) {
+  let binary = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+function base64ToBytes(value) {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+async function saveEncryptedToken(token) {
+  const key = await getVaultKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encoded = new TextEncoder().encode(token);
+  const cipher = new Uint8Array(await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    encoded
+  ));
+  localStorage.setItem(
+    TOKEN_VAULT.cipherKey,
+    JSON.stringify({ v: 1, iv: bytesToBase64(iv), data: bytesToBase64(cipher) })
+  );
+}
+
+async function restoreEncryptedToken() {
+  const raw = localStorage.getItem(TOKEN_VAULT.cipherKey);
+  if (!raw) return null;
+  try {
+    const box = JSON.parse(raw);
+    if (!box.iv || !box.data) return null;
+    const key = await getVaultKey();
+    const plain = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: base64ToBytes(box.iv) },
+      key,
+      base64ToBytes(box.data)
+    );
+    return new TextDecoder().decode(plain);
+  } catch (e) {
+    console.warn('Encrypted GitHub token could not be restored:', e);
+    return null;
+  }
+}
+
+function clearEncryptedToken() {
+  localStorage.removeItem(TOKEN_VAULT.cipherKey);
+}
+
 /* ===================== AUTH ===================== */
+
 function openAuthModal() {
   closeAllModals();
   const overlay = document.createElement('div');
@@ -442,7 +677,7 @@ function openAuthModal() {
           <div class="auth-hero" style="padding:20px;">
             <div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.215 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.28-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
             <h2>Secure GitHub Login</h2>
-            <p>Your token is stored only in session memory. Erased the moment you close this tab.</p>
+            <p>Your token is encrypted locally with AES-GCM and stored only in this browser.</p>
           </div>
           <div class="auth-form">
             <div class="form-group">
@@ -451,7 +686,7 @@ function openAuthModal() {
               <div class="hint">Generate at github.com/settings/tokens with <b>repo, delete_repo</b> scopes.</div>
             </div>
             <div class="security-note">
-              <strong>101% Secure:</strong> Token never leaves your browser. Stored in sessionStorage only. Auto-cleared on tab close. No server, no logs, no tracking.
+              <strong>Encrypted locally:</strong> Token is encrypted with AES-GCM before local storage. It is never sent to a GitView server; GitHub API requests use your token directly.
             </div>
             <button class="btn btn-primary" style="justify-content:center;" onclick="loginWithPAT()">Connect Securely</button>
           </div>
@@ -496,7 +731,8 @@ async function loginWithPAT() {
   const user = await res.json();
   state.token = token;
   state.user = user;
-  sessionStorage.setItem('gh_token', token);
+  await saveEncryptedToken(token);
+  sessionStorage.removeItem('gh_token');
   sessionStorage.setItem('gh_user', JSON.stringify(user));
   closeAllModals();
   updateAuthUI();
@@ -532,7 +768,8 @@ async function startDeviceFlow() {
       if (tokenData.access_token) {
         clearInterval(poll);
         state.token = tokenData.access_token;
-        sessionStorage.setItem('gh_token', tokenData.access_token);
+        await saveEncryptedToken(tokenData.access_token);
+        sessionStorage.removeItem('gh_token');
         const userRes = await fetch('https://api.github.com/user', { headers: ghHeaders() });
         const user = await userRes.json();
         state.user = user;
@@ -557,6 +794,7 @@ function logout() {
   state.activeFile = null;
   state.selectedFiles.clear();
   state.bulkMode = false;
+  clearEncryptedToken();
   sessionStorage.removeItem('gh_token');
   sessionStorage.removeItem('gh_user');
   sessionStorage.removeItem('gh_repos');
@@ -572,6 +810,7 @@ function updateAuthUI() {
   if (state.user) {
     els.topbarRight.innerHTML = `
       <div class="user-chip"><img src="${state.user.avatar_url}" alt="${state.user.login}"><span>${state.user.login}</span></div>
+      <button class="btn btn-sm btn-ghost sync-btn" id="sync-btn" onclick="syncRepositories()" title="Sync repositories"><span class="iconify" data-icon="mdi:sync"></span> Sync</button>
       <button class="btn btn-sm btn-ghost" onclick="logout()">Logout</button>`;
     els.authBtn.style.display = 'none';
     els.sidebar.style.display = 'flex';
@@ -581,6 +820,81 @@ function updateAuthUI() {
     els.topbarRight.innerHTML = `<button class="btn btn-primary btn-sm" id="auth-btn" onclick="openAuthModal()">Sign In</button>`;
     els.sidebar.style.display = 'none';
     els.repoDeleteBtn.style.display = 'none';
+  }
+}
+
+
+/* ===================== REPOSITORY SYNC ===================== */
+/* Pulls the live GitHub repository list so repos created after login appear. */
+async function syncRepositories() {
+  if (!state.token || !state.user) {
+    showToast('Sign in to sync your repositories', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('sync-btn');
+  if (btn) {
+    btn.classList.add('syncing');
+    btn.disabled = true;
+  }
+
+  const previousKey = state.owner && state.repo ? `${state.owner}/${state.repo}` : null;
+
+  try {
+    const fresh = [];
+    let page = 1;
+
+    while (true) {
+      const res = await fetch(
+        `https://api.github.com/user/repos?per_page=100&page=${page}&sort=updated`,
+        { headers: ghHeaders() }
+      );
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Repository sync failed (HTTP ${res.status})`);
+      }
+
+      const data = await res.json();
+      fresh.push(...data);
+      if (data.length < 100) break;
+      page++;
+    }
+
+    const oldMap = new Map(state.repos.map(r => [r.full_name, r]));
+    const newRepos = fresh.filter(r => !oldMap.has(r.full_name));
+    const removedRepos = state.repos.filter(r => !fresh.some(n => n.full_name === r.full_name));
+
+    state.repos = fresh;
+    sessionStorage.setItem('gh_repos', JSON.stringify(fresh));
+
+    if (newRepos.length) {
+      showToast(`${newRepos.length} new repo${newRepos.length === 1 ? '' : 's'} synced`, 'success');
+    } else if (removedRepos.length) {
+      showToast(`${removedRepos.length} removed repo${removedRepos.length === 1 ? '' : 's'} synced`, 'info');
+    } else {
+      showToast(`Repository list is up to date (${fresh.length})`, 'success');
+    }
+
+    /* Keep the currently open repository if it still exists. */
+    if (previousKey) {
+      const stillExists = fresh.some(r => r.full_name === previousKey);
+      if (!stillExists) {
+        state.owner = null;
+        state.repo = null;
+        state.currentPath = '';
+        state.cache.clear();
+        els.currentRepoName.textContent = 'Select a repo';
+        els.fileList.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-secondary);">Repository no longer exists or is not accessible.</div>';
+      }
+    }
+  } catch (e) {
+    showToast(e.message, 'error');
+  } finally {
+    if (btn) {
+      btn.classList.remove('syncing');
+      btn.disabled = false;
+    }
   }
 }
 
@@ -647,16 +961,26 @@ function renderRepoItem(r) {
 }
 
 window.selectRepo = function(owner, repo) {
+  /* Public repositories can be browsed without signing in. */
+  els.sidebar.style.display = 'flex';
+  els.mainEmpty.style.display = 'none';
+  els.repoDeleteBtn.style.display = state.token ? '' : 'none';
+
   state.owner = owner;
   state.repo = repo;
+  featureState.branch = null;
+  featureState.branches = [];
+  state.repoDetails = null;
   state.currentPath = '';
+  state.pathHistory = [];
+  state.pathHistoryIndex = -1;
   state.cache.clear();
   state.activeFile = null;
   state.selectedFiles.clear();
   updateBulkBar();
   els.currentRepoName.textContent = `${owner}/${repo}`;
   closeAllModals();
-  window.navigateTo('');
+  window.navigateTo('').then(() => showDashboard());
 };
 
 window.closeAllModals = function() {
@@ -731,14 +1055,14 @@ window.toggleBulkMode = function() {
   els.bulkModeBtn.style.color = state.bulkMode ? 'var(--danger)' : '';
   state.selectedFiles.clear();
   updateBulkBar();
-  const currentItems = state.cache.get(`${state.owner}/${state.repo}/${state.currentPath || 'root'}`);
+  const currentItems = state.cache.get(`${state.owner}/${state.repo}/${currentBranch()}/${state.currentPath || 'root'}`);
   if (currentItems) renderFileList(currentItems);
 };
 
 window.clearSelection = function() {
   state.selectedFiles.clear();
   updateBulkBar();
-  const currentItems = state.cache.get(`${state.owner}/${state.repo}/${state.currentPath || 'root'}`);
+  const currentItems = state.cache.get(`${state.owner}/${state.repo}/${currentBranch()}/${state.currentPath || 'root'}`);
   if (currentItems) renderFileList(currentItems);
 };
 
@@ -895,9 +1219,10 @@ function mapPrismLang(ext) {
 
 /* ===================== API ===================== */
 async function fetchDirectory(path) {
-  const key = `${state.owner}/${state.repo}/${path || 'root'}`;
+  const key = `${state.owner}/${state.repo}/${currentBranch()}/${path || 'root'}`;
   if (state.cache.has(key)) return state.cache.get(key);
-  const api = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}`;
+  const ref = featureState.branch || state.repoDetails?.default_branch;
+  const api = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}${ref ? `?ref=${encodeURIComponent(ref)}` : ''}`;
   const res = await fetch(api, { headers: ghHeaders() });
   const remaining = res.headers.get('x-ratelimit-remaining');
   const limit = res.headers.get('x-ratelimit-limit');
@@ -1007,7 +1332,7 @@ els.fileFilter.addEventListener('input', (e) => {
 /* ===================== PREVIEW ===================== */
 async function openFile(item) {
   state.activeFile = item.path;
-  const currentItems = state.cache.get(`${state.owner}/${state.repo}/${state.currentPath || 'root'}`);
+  const currentItems = state.cache.get(`${state.owner}/${state.repo}/${currentBranch()}/${state.currentPath || 'root'}`);
   if (currentItems) renderFileList(currentItems);
   const info = getFileCategory(item.name);
   const downloadUrl = item.download_url;
@@ -1018,12 +1343,13 @@ async function openFile(item) {
     <div class="preview-header">
       <div>
         <div class="preview-title"><div class="icon">${ICONS[info.icon] || ICONS.file}</div>${escapeHtml(item.name)}</div>
-        <div class="preview-meta">${formatBytes(item.size)} &bull; ${info.type.toUpperCase()}</div>
+        <div class="preview-meta" id="file-metadata">${formatBytes(item.size)} &bull; ${info.type.toUpperCase()}</div>
       </div>
       <div class="preview-actions">
         <button onclick="copyCode()" id="copy-code-btn" style="display:none;">Copy</button>
         <button onclick="window.open('${htmlUrl}','_blank')">GitHub</button>
         <button onclick="window.open('${downloadUrl}','_blank')">Download</button>
+        ${['text','code','html'].includes(info.type) ? `<button onclick="showEditor('${escapeHtml(item.path)}')"><span class="iconify" data-icon="mdi:pencil-outline"></span>Edit</button>` : ''}
         ${canDelete ? `<button class="danger" onclick="deleteSingleFileByPath('${item.path}', '${item.name}')">Delete</button>` : ''}
         ${info.type === 'html' ? `<button onclick="openHtmlLiveEditorFromFile('${escapeHtml(item.path)}')"><span class="iconify" data-icon="mdi:play"></span>Live Editor</button>` : ''}
       </div>
@@ -1042,7 +1368,7 @@ async function openFile(item) {
     }
     if (['image','audio','video','pdf'].includes(info.type)) {
       try {
-        const apiUrl = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(item.path).replace(/%2F/g,'/')}`;
+        const apiUrl = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(item.path).replace(/%2F/g,'/')}?ref=${encodeURIComponent(currentBranch())}`;
         const apiRes = await fetch(apiUrl, { headers: ghHeaders() });
         if (!apiRes.ok) throw new Error(`API ${apiRes.status}`);
         const apiData = await apiRes.json();
@@ -1067,12 +1393,14 @@ async function openFile(item) {
     } else if (['text','code','html','markdown'].includes(info.type)) {
       let text = '';
       try {
-        const apiUrl = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(item.path).replace(/%2F/g,'/')}`;
+        const apiUrl = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${encodeURIComponent(item.path).replace(/%2F/g,'/')}?ref=${encodeURIComponent(currentBranch())}`;
         const apiRes = await fetch(apiUrl, { headers: ghHeaders() });
         if (!apiRes.ok) throw new Error(`API ${apiRes.status}`);
         const apiData = await apiRes.json();
         if (apiData.content) {
-          text = atob(apiData.content.replace(/\s/g, ''));
+          text = decodeFile(apiData.content);
+          const metadata = document.getElementById('file-metadata');
+          if (metadata) metadata.textContent = `${formatBytes(apiData.size)} · ${mapPrismLang(info.lang).toUpperCase()} · ${text.split(/\r?\n/).length} lines · SHA ${apiData.sha.slice(0, 7)}`;
         } else throw new Error('No content field');
       } catch (e) {
         if (downloadUrl) {
@@ -1212,7 +1540,7 @@ window.openHtmlLiveEditorFromFile = async function(filePath) {
     if (!apiRes.ok) throw new Error(`API ${apiRes.status}`);
     const apiData = await apiRes.json();
     if (!apiData.content) throw new Error('No content field');
-    text = atob(apiData.content.replace(/\s/g, ''));
+    text = decodeFile(apiData.content);
     state.htmlLiveText = text;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     const liveBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.includes('Live'));
@@ -1236,8 +1564,175 @@ window.openHtmlLiveEditorFromFile = async function(filePath) {
   } catch (err) { showToast('Failed: ' + err.message, 'error'); }
 };
 
+/* ===================== GITHUB WORKBENCH ===================== */
+const featureState = { branch: null, branches: [], editor: null, model: null, secondEditor: null, split: false, sha: null };
+const githubApi = 'https://api.github.com';
+function repoApi(path) { return `${githubApi}/repos/${encodeURIComponent(state.owner)}/${encodeURIComponent(state.repo)}${path}`; }
+function currentBranch() { return featureState.branch || state.repoDetails?.default_branch || 'main'; }
+function requireRepo(write = false) {
+  if (!state.owner || !state.repo) { showToast('Select a repository first', 'error'); return false; }
+  if (write && !state.token) { showToast('Sign in with a token that has repository write access', 'error'); return false; }
+  return true;
+}
+async function ghApi(path, options = {}) {
+  const response = await fetch(`${githubApi}${path}`, { ...options, headers: { ...ghHeaders(), ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(options.headers || {}) } });
+  if (!response.ok) { const body = await response.json().catch(() => ({})); throw new Error(`${body.message || 'GitHub API request failed'} (HTTP ${response.status})`); }
+  return response.status === 204 ? null : response.json();
+}
+function featureView(title, body) { els.preview.innerHTML = `<section class="feature-content"><header class="feature-content-header"><h2>${escapeHtml(title)}</h2><button class="btn btn-sm" onclick="showDashboard()"><span class="iconify" data-icon="mdi:view-dashboard-outline"></span>Overview</button></header>${body}</section>`; }
+function featureDate(value) { return value ? new Date(value).toLocaleString() : 'Unknown'; }
+function decodeFile(content) { return new TextDecoder().decode(base64ToBytes((content || '').replace(/\s/g, ''))); }
+function encodeFile(content) { return bytesToBase64(new TextEncoder().encode(content)); }
+async function featureBranches() { featureState.branches = await ghApi(repoApi('/branches?per_page=100')); return featureState.branches; }
+function branchOptions(selected = currentBranch()) { const branches = featureState.branches.length ? featureState.branches : [{ name: selected }]; return branches.map(branch => `<option value="${escapeHtml(branch.name)}" ${branch.name === selected ? 'selected' : ''}>${escapeHtml(branch.name)}</option>`).join(''); }
+async function featureFile(path, branch = currentBranch()) { return ghApi(repoApi(`/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(branch)}`)); }
+
+async function dashboardCard() {
+  const [repo, languages, tree, pulls] = await Promise.all([
+    ghApi(repoApi('')), ghApi(repoApi('/languages')).catch(() => ({})),
+    ghApi(repoApi(`/git/trees/${encodeURIComponent(currentBranch())}?recursive=1`)).catch(() => ({ tree: [] })),
+    ghApi(repoApi('/pulls?state=open&per_page=100')).catch(() => []),
+  ]);
+  state.repoDetails = repo;
+  const total = Object.values(languages).reduce((sum, value) => sum + value, 0);
+  const stats = [['Stars', repo.stargazers_count], ['Forks', repo.forks_count], ['Watchers', repo.subscribers_count ?? repo.watchers_count], ['Issues', repo.open_issues_count], ['PRs', pulls.length], ['Size', formatBytes(repo.size * 1024)]];
+  const chips = Object.entries(languages).sort((a,b) => b[1] - a[1]).map(([name,size]) => `<span class="language-chip">${escapeHtml(name)} ${Math.round(size / Math.max(total,1) * 100)}%</span>`).join('');
+  const count = (tree.tree || []).filter(file => file.type === 'blob').length;
+  return `<section class="feature-dashboard"><div class="dashboard-head"><div><strong>${escapeHtml(repo.full_name)}</strong><div class="preview-meta">${escapeHtml(repo.description || 'Repository overview')} · ${escapeHtml(currentBranch())} · ${count} files</div></div><span class="preview-meta">Updated ${featureDate(repo.pushed_at)}</span></div><div class="dashboard-stats">${stats.map(([label,value]) => `<div class="dashboard-stat"><span>${label}</span><strong>${typeof value === 'number' ? value.toLocaleString() : value}</strong></div>`).join('')}</div><div class="dashboard-languages"><strong>Languages</strong>${chips || 'Not available'}</div></section>`;
+}
+window.showDashboard = async function() {
+  if (!requireRepo()) return;
+  els.preview.innerHTML = '<div class="shimmer" style="height:120px"></div>';
+  try {
+    const card = await dashboardCard(), theme = localStorage.getItem('gitview-theme') || 'system', accent = localStorage.getItem('gitview-accent') || '#2563eb';
+    els.preview.innerHTML = `${card}<section class="feature-content"><header class="feature-content-header"><h2>Repository workspace</h2><div style="display:flex;gap:6px"><select class="btn btn-sm" aria-label="Theme" onchange="setTheme(this.value)"><option value="light" ${theme==='light'?'selected':''}>Light</option><option value="dark" ${theme==='dark'?'selected':''}>Dark</option><option value="system" ${theme==='system'?'selected':''}>System</option></select><select class="btn btn-sm" aria-label="Accent color" onchange="setAccent(this.value)"><option value="#2563eb" ${accent==='#2563eb'?'selected':''}>Blue</option><option value="#8b5cf6" ${accent==='#8b5cf6'?'selected':''}>Purple</option><option value="#059669" ${accent==='#059669'?'selected':''}>Green</option><option value="#ea580c" ${accent==='#ea580c'?'selected':''}>Orange</option></select></div></header><div class="feature-list"><div class="feature-list-item"><div><strong>Branch</strong><small>${escapeHtml(currentBranch())}</small></div><button class="btn btn-sm" onclick="showBranches()">Manage</button></div><div class="feature-list-item"><div><strong>Latest activity</strong><small>${featureDate(state.repoDetails.pushed_at)}</small></div><button class="btn btn-sm" onclick="showCommits()">History</button></div></div></section>`;
+  } catch (error) { showToast(error.message, 'error'); }
+};
+
+async function loadMonaco() {
+  if (window.monaco) return window.monaco;
+  if (window.__gitviewMonaco) return window.__gitviewMonaco;
+  window.__gitviewMonaco = new Promise((resolve,reject) => {
+    const base = 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min', script = document.createElement('script'); script.src = `${base}/vs/loader.js`;
+    script.onload = () => { window.MonacoEnvironment = { getWorkerUrl: () => `data:text/javascript;charset=utf-8,${encodeURIComponent(`self.MonacoEnvironment={baseUrl:'${base}/'};importScripts('${base}/vs/base/worker/workerMain.js');`)}` }; window.require.config({ paths:{ vs:`${base}/vs` } }); window.require(['vs/editor/editor.main'],() => resolve(window.monaco),reject); };
+    script.onerror = () => reject(new Error('Monaco failed to load; check your network connection.')); document.head.appendChild(script);
+  });
+  return window.__gitviewMonaco;
+}
+function editorLang(path) { const ext=(path.split('.').pop()||'').toLowerCase(); return ({js:'javascript',jsx:'javascript',ts:'typescript',tsx:'typescript',py:'python',json:'json',html:'html',css:'css',scss:'scss',md:'markdown',yaml:'yaml',yml:'yaml',sh:'shell',sql:'sql',java:'java',go:'go',rs:'rust'})[ext] || 'plaintext'; }
+window.showEditor = async function(path = state.activeFile || '') {
+  if (!requireRepo()) return;
+  featureState.editor?.dispose(); featureState.secondEditor?.dispose(); featureState.model?.dispose(); featureState.editor = featureState.secondEditor = featureState.model = null; featureState.sha = null;
+  let content = '';
+  if (path) { try { const file = await featureFile(path); content = decodeFile(file.content); featureState.sha = file.sha; } catch (error) { showToast(error.message,'error'); return; } }
+  featureView('Code editor', `<div class="feature-form"><div class="tabs"><button class="tab-btn active">${escapeHtml(path.split('/').pop() || 'Untitled')}</button></div><div class="form-row"><input id="editor-path" aria-label="File path" value="${escapeHtml(path)}" placeholder="src/app.js"><select id="editor-branch" aria-label="Commit branch"><option>${escapeHtml(currentBranch())}</option></select></div><div class="dashboard-head" style="margin:0"><button class="btn btn-sm" onclick="toggleEditorSplit()"><span class="iconify" data-icon="mdi:table-column"></span>Split</button><div style="display:flex;gap:6px"><input id="editor-message" aria-label="Commit message" placeholder="Commit message" style="width:220px"><button class="btn btn-primary btn-sm" onclick="commitEditor()"><span class="iconify" data-icon="mdi:source-commit"></span>Commit</button></div></div><div id="editor-host" style="height:58vh;min-height:320px;border:1px solid var(--border)"></div><div id="editor-second" style="display:none;height:58vh;min-height:320px;border:1px solid var(--border)"></div></div>`);
+  try {
+    const monaco = await loadMonaco(), host = document.getElementById('editor-host'); if (!host) return;
+    featureState.model = monaco.editor.createModel(content,editorLang(path||'new.txt'));
+    featureState.editor = monaco.editor.create(host,{ model:featureState.model,theme:document.documentElement.classList.contains('theme-dark')?'vs-dark':'vs',minimap:{enabled:true},automaticLayout:true,fontFamily:'JetBrains Mono, monospace',fontSize:13,scrollBeyondLastLine:false });
+  } catch (error) { const host=document.getElementById('editor-host'); if(host) host.innerHTML=`<textarea id="editor-fallback" aria-label="Code editor" style="width:100%;height:100%;resize:none;padding:12px;background:#0f172a;color:#e2e8f0;border:0;font:12px/1.6 var(--font-mono)">${escapeHtml(content)}</textarea>`; showToast(`${error.message} Using a text editor fallback.`,'info'); }
+  try { const branches=await featureBranches(), select=document.getElementById('editor-branch'); if(select) select.innerHTML=branches.map(branch=>`<option value="${escapeHtml(branch.name)}" ${branch.name===currentBranch()?'selected':''}>${escapeHtml(branch.name)}</option>`).join(''); } catch(error) { showToast(error.message,'error'); }
+};
+window.toggleEditorSplit = async function() { const host=document.getElementById('editor-second'),primary=document.getElementById('editor-host'); if(!host||!primary)return;let wrapper=document.getElementById('editor-split-wrap');if(!wrapper){wrapper=document.createElement('div');wrapper.id='editor-split-wrap';wrapper.style.cssText='display:flex;width:100%;height:58vh;min-height:320px;';primary.before(wrapper);wrapper.append(primary,host);primary.style.cssText='height:100%;min-height:0;flex:1;min-width:0;border:1px solid var(--border)';host.style.cssText='display:none;height:100%;min-height:0;flex:1;min-width:0;border:1px solid var(--border)';}featureState.split=!featureState.split;host.style.display=featureState.split?'block':'none';if(featureState.split&&!featureState.secondEditor&&featureState.model){try{const monaco=await loadMonaco();featureState.secondEditor=monaco.editor.create(host,{model:featureState.model,theme:document.documentElement.classList.contains('theme-dark')?'vs-dark':'vs',minimap:{enabled:false},automaticLayout:true});}catch(error){showToast(error.message,'error');}} };
+window.commitEditor = async function() {
+  if(!requireRepo(true))return;
+  const path=document.getElementById('editor-path')?.value.trim().replace(/^\/+|\/+$/g,''),message=document.getElementById('editor-message')?.value.trim(),branch=document.getElementById('editor-branch')?.value||currentBranch();
+  const content=featureState.editor?.getValue()??document.getElementById('editor-fallback')?.value??'';
+  if(!path||!message){showToast('Provide a file path and commit message','error');return;}
+  try { let sha=featureState.sha; if(!sha){try{sha=(await featureFile(path,branch)).sha;}catch(error){if(!error.message.includes('404'))throw error;}} await ghApi(repoApi(`/contents/${path.split('/').map(encodeURIComponent).join('/')}`),{method:'PUT',body:JSON.stringify({message,content:encodeFile(content),branch,...(sha?{sha}:{})})}); featureState.branch=branch;state.cache.clear();state.activeFile=path;showToast('Changes committed to GitHub','success');showEditor(path); }
+  catch(error){showToast(error.message,'error');}
+};
+window.showCreateFile = () => showEditor('');
+window.showCreateFolder = function() {
+  if (!requireRepo(true)) return;
+  featureView('Create folder', `<form class="feature-form" onsubmit="event.preventDefault();createFolder()"><input id="folder-path" placeholder="Folder path, e.g. docs/guides" required><input id="folder-message" placeholder="Commit message" value="Create folder"><button class="btn btn-primary"><span class="iconify" data-icon="mdi:folder-plus-outline"></span>Create folder</button></form>`);
+};
+window.createFolder = async function() {
+  if (!requireRepo(true)) return;
+  const path = document.getElementById('folder-path').value.trim().replace(/^\/+|\/+$/g, ''), message = document.getElementById('folder-message').value.trim() || 'Create folder';
+  if (!path) return;
+  try {
+    await ghApi(repoApi(`/contents/${path.split('/').map(encodeURIComponent).join('/')}/.gitkeep`), { method:'PUT', body:JSON.stringify({ message, content:encodeFile('\n'), branch:currentBranch() }) });
+    state.cache.clear(); showToast(`Created ${path}`, 'success'); window.navigateTo(state.currentPath);
+  } catch (error) { showToast(error.message, 'error'); }
+};
+
+window.showUploadFiles = function() {
+  if(!requireRepo(true))return;
+  featureView('Upload files',`<div class="feature-form"><input id="upload-folder" aria-label="Destination folder" placeholder="Destination folder, e.g. assets"><div id="upload-drop" style="padding:30px;border:1px dashed var(--border-hover);text-align:center"><span class="iconify" data-icon="mdi:cloud-upload-outline"></span><p>Drop files here or <button class="btn btn-sm" onclick="document.getElementById('upload-input').click()">Browse</button></p><input id="upload-input" type="file" multiple hidden></div><div id="upload-status" class="preview-meta"></div><input id="upload-message" aria-label="Commit message" placeholder="Commit message"><button class="btn btn-primary" onclick="uploadFiles()">Upload and commit</button></div>`);
+  const drop=document.getElementById('upload-drop'); drop.addEventListener('dragover',event=>{event.preventDefault();drop.style.borderColor='var(--accent)';}); drop.addEventListener('dragleave',()=>drop.style.borderColor=''); drop.addEventListener('drop',event=>{event.preventDefault();document.getElementById('upload-input').files=event.dataTransfer.files;document.getElementById('upload-status').textContent=`${event.dataTransfer.files.length} file(s) selected`;}); document.getElementById('upload-input').addEventListener('change',event=>document.getElementById('upload-status').textContent=`${event.target.files.length} file(s) selected`);
+};
+window.uploadFiles = async function() {
+  const files=Array.from(document.getElementById('upload-input')?.files||[]),folder=document.getElementById('upload-folder')?.value.trim().replace(/^\/+|\/+$/g,''),message=document.getElementById('upload-message')?.value.trim()||'Upload files'; if(!files.length){showToast('Select files first','error');return;}
+  let complete=0; for(const file of files){try{const path=[folder,file.webkitRelativePath||file.name].filter(Boolean).join('/');let sha;try{sha=(await featureFile(path)).sha;}catch(error){if(!error.message.includes('404'))throw error;}const bytes=new Uint8Array(await file.arrayBuffer());await ghApi(repoApi(`/contents/${path.split('/').map(encodeURIComponent).join('/')}`),{method:'PUT',body:JSON.stringify({message:`${message}: ${file.name}`,content:bytesToBase64(bytes),branch:currentBranch(),...(sha?{sha}:{})})});complete++;}catch(error){showToast(`${file.name}: ${error.message}`,'error');}const status=document.getElementById('upload-status');if(status)status.textContent=`Uploaded ${complete} of ${files.length}`;}
+  state.cache.clear();showToast(`${complete} of ${files.length} file(s) committed`,complete===files.length?'success':'info');
+};
+
+window.showBranches = async function() {
+  if(!requireRepo())return;featureView('Branch manager','<div class="feature-list">Loading branches...</div>');
+  try { const [branches,repo]=await Promise.all([featureBranches(),ghApi(repoApi(''))]);state.repoDetails=repo;const rows=branches.map(branch=>`<div class="feature-list-item"><div><strong>${escapeHtml(branch.name)} ${branch.name===repo.default_branch?'<span class="badge badge-public">Default</span>':''}</strong><small>${branch.commit.sha.slice(0,12)} · ${branch.protected?'Protected':'Unprotected'}</small></div><div><button class="btn btn-sm" onclick="switchBranch('${encodeURIComponent(branch.name)}')">${branch.name===currentBranch()?'Current':'Switch'}</button>${branch.name!==repo.default_branch?`<button class="btn btn-sm btn-danger" onclick="deleteBranch('${encodeURIComponent(branch.name)}')" title="Delete"><span class="iconify" data-icon="mdi:delete-outline"></span></button>`:''}</div></div>`).join('');featureView('Branch manager',`<div class="feature-form"><div class="form-row"><input id="new-branch" placeholder="New branch name"><button class="btn btn-primary" onclick="createBranch()">Create branch</button></div></div><div class="feature-list">${rows}</div><div class="feature-form"><h3>Compare branches</h3><div class="form-row"><select id="compare-base">${branchOptions(repo.default_branch)}</select><select id="compare-head">${branchOptions(currentBranch())}</select></div><button class="btn" onclick="showDiff(document.getElementById('compare-base').value,document.getElementById('compare-head').value)">Compare</button></div>`); }
+  catch(error){showToast(error.message,'error');}
+};
+window.switchBranch = async encoded => {featureState.branch=decodeURIComponent(encoded);state.cache.clear();await window.navigateTo('');showDashboard();};
+window.createBranch = async function(){if(!requireRepo(true))return;const name=document.getElementById('new-branch')?.value.trim();if(!name){showToast('Enter a branch name','error');return;}try{const source=await ghApi(repoApi(`/branches/${encodeURIComponent(currentBranch())}`));await ghApi(repoApi('/git/refs'),{method:'POST',body:JSON.stringify({ref:`refs/heads/${name}`,sha:source.commit.sha})});featureState.branches=[];showToast(`Created ${name}`,'success');showBranches();}catch(error){showToast(error.message,'error');}};
+window.deleteBranch = async function(encoded){if(!requireRepo(true))return;const name=decodeURIComponent(encoded);if(!confirm(`Delete branch ${name}?`))return;try{await ghApi(repoApi(`/git/refs/heads/${name.split('/').map(encodeURIComponent).join('/')}`),{method:'DELETE'});featureState.branches=[];if(currentBranch()===name)featureState.branch=null;showBranches();}catch(error){showToast(error.message,'error');}};
+
+window.showDiff = async function(base,head){
+  if(!requireRepo())return;if(!featureState.branches.length){try{await featureBranches();}catch(error){showToast(error.message,'error');return;}}
+  const left=base||document.getElementById('compare-base')?.value||state.repoDetails?.default_branch||featureState.branches[0]?.name,right=head||document.getElementById('compare-head')?.value||currentBranch();
+  featureView('Branch diff',`<div class="feature-form"><div class="form-row"><select id="diff-base">${branchOptions(left)}</select><select id="diff-head">${branchOptions(right)}</select></div><button class="btn btn-primary" onclick="showDiff(document.getElementById('diff-base').value,document.getElementById('diff-head').value)">Compare</button></div><div id="diff-result" class="feature-list">Loading comparison...</div>`);
+  try{const result=await ghApi(repoApi(`/compare/${encodeURIComponent(left)}...${encodeURIComponent(right)}`));const files=result.files.map(file=>{const old=[],fresh=[];(file.patch||'').split('\n').forEach(line=>{if(line.startsWith('@@')||line.startsWith('\\'))return;if(line.startsWith('-'))old.push(`<div class="diff-line-remove">${escapeHtml(line)}</div>`);else if(line.startsWith('+'))fresh.push(`<div class="diff-line-add">${escapeHtml(line)}</div>`);else{const same=`<div>${escapeHtml(line)}</div>`;old.push(same);fresh.push(same);}});return `<section class="diff-file"><div class="diff-file-name">${escapeHtml(file.filename)} · +${file.additions} −${file.deletions}</div><div class="diff-grid"><pre class="diff-lines">${old.join('')||'(empty)'}</pre><pre class="diff-lines">${fresh.join('')||'(empty)'}</pre></div></section>`;}).join('');const target=document.getElementById('diff-result');if(target)target.innerHTML=`<div class="preview-meta">${result.ahead_by} ahead · ${result.behind_by} behind · ${result.total_commits} commits</div>${files||'No file changes.'}`;}catch(error){const target=document.getElementById('diff-result');if(target)target.textContent=error.message;}
+};
+window.showCommitDiff = async function(sha){try{const commit=await ghApi(repoApi(`/commits/${encodeURIComponent(sha)}`)),files=commit.files.map(file=>`<section class="diff-file"><div class="diff-file-name">${escapeHtml(file.filename)} · +${file.additions} −${file.deletions}</div><pre class="diff-lines">${(file.patch||'Binary or large file').split('\n').map(line=>`<div class="${line.startsWith('+')?'diff-line-add':line.startsWith('-')?'diff-line-remove':''}">${escapeHtml(line)}</div>`).join('')}</pre></section>`).join('');featureView(`Commit ${sha.slice(0,8)}`,`<div class="feature-list"><strong>${escapeHtml(commit.commit.message)}</strong><small>${escapeHtml(commit.commit.author?.name||'Unknown')} · ${featureDate(commit.commit.author?.date)}</small></div>${files}`);}catch(error){showToast(error.message,'error');}};
+window.showCommits = async function(){if(!requireRepo())return;featureView('Commit history','<div class="feature-list">Loading commits...</div>');try{const commits=await ghApi(repoApi(`/commits?sha=${encodeURIComponent(currentBranch())}&per_page=40`));const rows=commits.map(commit=>`<button class="feature-list-item" style="width:100%;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer" onclick="showCommitDiff('${commit.sha}')"><div><strong>${escapeHtml(commit.commit.message.split('\n')[0])}</strong><small>${escapeHtml(commit.author?.login||commit.commit.author?.name||'Unknown')} · ${featureDate(commit.commit.author?.date)}</small></div><code>${commit.sha.slice(0,8)}</code></button>`).join('');featureView('Commit history',`<div class="feature-list">${rows||'No commits found.'}</div>`);}catch(error){showToast(error.message,'error');}};
+
+window.showIssues = async function(){if(!requireRepo())return;featureView('GitHub issues','<div class="feature-list">Loading issues...</div>');try{const issues=await ghApi(repoApi('/issues?state=all&per_page=50'));const rows=issues.filter(issue=>!issue.pull_request).map(issue=>`<div class="feature-list-item"><div><button class="btn-ghost" style="border:0;text-align:left;cursor:pointer;color:var(--text-primary)" onclick="showIssue('${issue.number}')"><strong>#${issue.number} ${escapeHtml(issue.title)}</strong></button><small>${issue.state} · ${escapeHtml(issue.user?.login||'')} · ${(issue.labels||[]).map(label=>escapeHtml(label.name)).join(', ')}</small></div><button class="btn btn-sm" onclick="toggleIssue('${issue.number}','${issue.state}')">${issue.state==='open'?'Close':'Reopen'}</button></div>`).join('');featureView('GitHub issues',`<div class="feature-content-header"><span>${issues.filter(issue=>!issue.pull_request).length} issues</span><button class="btn btn-primary btn-sm" onclick="showCreateIssue()">New issue</button></div><div class="feature-list">${rows||'No issues found.'}</div>`);}catch(error){showToast(error.message,'error');}};
+window.showCreateIssue = function(){if(!requireRepo(true))return;featureView('Create issue',`<form class="feature-form" onsubmit="event.preventDefault();createIssue()"><input id="issue-title" placeholder="Issue title" required><textarea id="issue-body" placeholder="Description"></textarea><div class="form-row"><input id="issue-labels" placeholder="Labels, comma separated"><input id="issue-assignees" placeholder="Assignees, comma separated"></div><button class="btn btn-primary">Create issue</button></form>`);};
+window.createIssue = async function(){try{const title=document.getElementById('issue-title').value.trim(),body=document.getElementById('issue-body').value,labels=document.getElementById('issue-labels').value.split(',').map(v=>v.trim()).filter(Boolean),assignees=document.getElementById('issue-assignees').value.split(',').map(v=>v.trim()).filter(Boolean);await ghApi(repoApi('/issues'),{method:'POST',body:JSON.stringify({title,body,labels,assignees})});showToast('Issue created','success');showIssues();}catch(error){showToast(error.message,'error');}};
+window.toggleIssue = async function(number,status){if(!requireRepo(true))return;try{await ghApi(repoApi(`/issues/${number}`),{method:'PATCH',body:JSON.stringify({state:status==='open'?'closed':'open'})});showIssues();}catch(error){showToast(error.message,'error');}};
+window.showIssue = async function(number){try{const [issue,comments]=await Promise.all([ghApi(repoApi(`/issues/${number}`)),ghApi(repoApi(`/issues/${number}/comments`))]);featureView(`#${number} ${issue.title}`,`<div class="feature-list"><p>${escapeHtml(issue.body||'No description')}</p>${comments.map(comment=>`<div class="feature-list-item"><div><strong>${escapeHtml(comment.user.login)}</strong><small>${escapeHtml(comment.body)}</small></div></div>`).join('')}</div><form class="feature-form" onsubmit="event.preventDefault();postIssueComment('${number}')"><textarea id="issue-comment" placeholder="Add a comment"></textarea><button class="btn btn-primary">Comment</button></form>`);}catch(error){showToast(error.message,'error');}};
+window.postIssueComment = async function(number){if(!requireRepo(true))return;try{const body=document.getElementById('issue-comment').value.trim();if(body){await ghApi(repoApi(`/issues/${number}/comments`),{method:'POST',body:JSON.stringify({body})});showIssue(number);}}catch(error){showToast(error.message,'error');}};
+
+window.showPullRequests = async function(){if(!requireRepo())return;featureView('Pull requests','<div class="feature-list">Loading pull requests...</div>');try{const prs=await ghApi(repoApi('/pulls?state=all&per_page=50'));const rows=prs.map(pr=>`<div class="feature-list-item"><div><strong><a href="${pr.html_url}" target="_blank" rel="noreferrer" style="color:inherit">#${pr.number} ${escapeHtml(pr.title)}</a></strong><small>${pr.state}${pr.merged_at?' · merged':''} · ${escapeHtml(pr.user.login)} · ${escapeHtml(pr.head.ref)} → ${escapeHtml(pr.base.ref)}</small></div>${pr.state==='open'?`<button class="btn btn-sm" onclick="closePullRequest('${pr.number}')">Close</button>`:''}</div>`).join('');featureView('Pull requests',`<div class="feature-content-header"><span>${prs.length} pull requests</span><button class="btn btn-primary btn-sm" onclick="showCreatePullRequest()">New pull request</button></div><div class="feature-list">${rows||'No pull requests found.'}</div>`);}catch(error){showToast(error.message,'error');}};
+window.showCreatePullRequest = async function(){if(!requireRepo(true))return;try{const branches=await featureBranches();featureView('Create pull request',`<form class="feature-form" onsubmit="event.preventDefault();createPullRequest()"><input id="pr-title" placeholder="Title" required><div class="form-row"><select id="pr-base">${branchOptions(state.repoDetails?.default_branch||branches[0]?.name)}</select><select id="pr-head">${branchOptions(currentBranch())}</select></div><textarea id="pr-body" placeholder="Description"></textarea><button class="btn btn-primary">Create pull request</button></form>`);}catch(error){showToast(error.message,'error');}};
+window.createPullRequest = async function(){try{const data=await ghApi(repoApi('/pulls'),{method:'POST',body:JSON.stringify({title:document.getElementById('pr-title').value.trim(),body:document.getElementById('pr-body').value,base:document.getElementById('pr-base').value,head:document.getElementById('pr-head').value})});showToast(`Pull request #${data.number} created`,'success');showPullRequests();}catch(error){showToast(error.message,'error');}};
+window.closePullRequest = async function(number){if(!requireRepo(true))return;try{await ghApi(repoApi(`/pulls/${number}`),{method:'PATCH',body:JSON.stringify({state:'closed'})});showPullRequests();}catch(error){showToast(error.message,'error');}};
+
+window.showCodeSearch = function(){if(!requireRepo())return;featureView('Search repository code',`<form class="feature-form" onsubmit="event.preventDefault();searchCode()"><input id="code-query" placeholder="Search code, e.g. fetch(" required><button class="btn btn-primary">Search code</button></form><div class="feature-list" id="search-results"></div>`);document.getElementById('code-query').focus();};
+window.searchCode = async function(){if(!state.token){showToast('Sign in to search repository code','error');return;}const query=document.getElementById('code-query').value.trim(),target=document.getElementById('search-results');target.textContent='Searching...';try{const data=await ghApi(`/search/code?q=${encodeURIComponent(`${query} repo:${state.owner}/${state.repo}`)}&per_page=30`,{headers:{Accept:'application/vnd.github.text-match+json'}});target.innerHTML=data.items.map(item=>`<div class="feature-list-item"><div><strong><a href="${item.html_url}" target="_blank" rel="noreferrer" style="color:inherit">${escapeHtml(item.path)}</a></strong><small>${escapeHtml(item.text_matches?.[0]?.fragment||'Match found')}</small></div></div>`).join('')||'No matches.';}catch(error){target.textContent=error.message;}};
+window.showDependencies = async function(){if(!requireRepo())return;try{const data=await featureFile('package.json'),manifest=JSON.parse(decodeFile(data.content)),deps={...manifest.dependencies,...manifest.devDependencies};featureView('Dependencies',`<div class="feature-list">${Object.entries(deps).map(([name,version])=>`<div class="feature-list-item"><strong>${escapeHtml(name)}</strong><code>${escapeHtml(version)}</code></div>`).join('')||'No dependencies declared.'}</div>`);}catch(error){showToast(error.message.includes('404')?'No root package.json found':error.message,'error');}};
+window.showImageGallery = async function(){if(!requireRepo())return;try{const data=await ghApi(repoApi(`/git/trees/${encodeURIComponent(currentBranch())}?recursive=1`)),images=data.tree.filter(file=>file.type==='blob'&&/\.(png|jpe?g|gif|webp|svg|avif)$/i.test(file.path));const cards=images.slice(0,60).map(file=>{const url=`https://raw.githubusercontent.com/${encodeURIComponent(state.owner)}/${encodeURIComponent(state.repo)}/${encodeURIComponent(currentBranch())}/${file.path.split('/').map(encodeURIComponent).join('/')}`;return `<a href="${url}" target="_blank" rel="noreferrer" title="${escapeHtml(file.path)}"><img loading="lazy" src="${url}" alt="${escapeHtml(file.path)}" style="width:100%;height:130px;object-fit:cover;border:1px solid var(--border);border-radius:4px"><small>${escapeHtml(file.path)}</small></a>`;}).join('');featureView('Repository images',`<div class="feature-form" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr)">${cards||'No images found.'}</div>`);}catch(error){showToast(error.message,'error');}};
+window.showReadme = async function(){if(!requireRepo())return;try{const tree=await ghApi(repoApi(`/git/trees/${encodeURIComponent(currentBranch())}?recursive=1`)),readme=tree.tree.find(file=>file.type==='blob'&&/^readme(?:\.|$)/i.test(file.path.split('/').pop()));if(!readme)throw new Error('No README found');const data=await featureFile(readme.path),html=DOMPurify.sanitize(marked.parse(decodeFile(data.content)));featureView('README preview',`<div class="preview-content markdown" style="padding:24px">${html}</div>`);const article=document.querySelector('.preview-content.markdown');const headings=Array.from(article.querySelectorAll('h1,h2,h3'));if(headings.length){const toc=document.createElement('nav');toc.className='readme-toc';toc.style.cssText='padding:12px 16px;margin:0 0 18px;background:var(--bg-deep);border-left:2px solid var(--accent)';toc.innerHTML=`<strong>Contents</strong><div style="display:grid;gap:5px;margin-top:8px">${headings.map((heading,index)=>{const id=`readme-heading-${index}`;heading.id=id;return `<a href="#${id}" style="color:var(--accent);text-decoration:none;margin-left:${(Number(heading.tagName[1])-1)*12}px">${escapeHtml(heading.textContent)}</a>`;}).join('')}</div>`;article.prepend(toc);}article.querySelectorAll('pre code.language-mermaid').forEach(code=>{const diagram=document.createElement('div');diagram.className='mermaid';diagram.textContent=code.textContent;code.parentElement.replaceWith(diagram);});if(window.mermaid){mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:document.documentElement.classList.contains('theme-dark')?'dark':'default'});await mermaid.run({querySelector:'.preview-content.markdown .mermaid'});}article.querySelectorAll('pre:not(.mermaid pre)').forEach(pre=>{const button=document.createElement('button');button.className='copy-btn';button.textContent='Copy';button.onclick=()=>navigator.clipboard.writeText(pre.innerText).then(()=>showToast('Copied','success'));pre.before(button);});}catch(error){showToast(error.message,'error');}};
+
+window.setTheme = function(theme){localStorage.setItem('gitview-theme',theme);const apply=dark=>document.documentElement.classList.toggle('theme-dark',dark);const media=matchMedia('(prefers-color-scheme: dark)');apply(theme==='dark'||(theme==='system'&&media.matches));media.onchange=theme==='system'?event=>apply(event.matches):null;if(featureState.editor&&window.monaco)monaco.editor.setTheme(document.documentElement.classList.contains('theme-dark')?'vs-dark':'vs');};
+window.setAccent = function(color){if(!/^#[0-9a-f]{6}$/i.test(color))return;localStorage.setItem('gitview-accent',color);document.documentElement.style.setProperty('--accent',color);document.documentElement.style.setProperty('--accent-hover',color);};
+window.toggleZenMode = () => document.body.classList.toggle('zen-mode');
+window.showGoToFile = async function(){if(!requireRepo())return;const overlay=document.createElement('div');overlay.className='modal-overlay palette-overlay';overlay.id='goto-modal';overlay.innerHTML='<div class="palette-modal"><input id="goto-query" placeholder="Go to file..." autocomplete="off"><div id="goto-results" class="palette-results">Loading repository files...</div></div>';overlay.addEventListener('click',event=>{if(event.target===overlay)overlay.remove();});document.body.appendChild(overlay);const input=document.getElementById('goto-query');input.focus();try{const tree=await ghApi(repoApi(`/git/trees/${encodeURIComponent(currentBranch())}?recursive=1`));featureState.fileIndex=(tree.tree||[]).filter(item=>item.type==='blob');const render=()=>{const results=document.getElementById('goto-results');if(!results)return;const files=featureState.fileIndex.filter(item=>item.path.toLowerCase().includes(input.value.toLowerCase())).slice(0,80);results.innerHTML=files.map(item=>`<button class="palette-item" onclick="closeAllModals();openFileByEncodedPath('${encodeURIComponent(item.path)}')"><span>${escapeHtml(item.path)}</span><small>${formatBytes(item.size)}</small></button>`).join('')||'No matching files.';};input.addEventListener('input',render);render();}catch(error){const results=document.getElementById('goto-results');if(results)results.textContent=error.message;}};
+window.openFileByEncodedPath = encoded => openFileByPath(decodeURIComponent(encoded));
+const workbenchCommands=[['Go to File','Ctrl+P',showGoToFile],['Search Repository','Ctrl+Shift+F',showCodeSearch],['Switch Branch','',showBranches],['New File','',showCreateFile],['Upload Files','',showUploadFiles],['Commit Changes','Ctrl+S',()=>featureState.editor?commitEditor():showEditor()],['View Commits','',showCommits],['Create Issue','',showCreateIssue],['Create Pull Request','',showCreatePullRequest],['Toggle Dark Mode','',()=>setTheme(document.documentElement.classList.contains('theme-dark')?'light':'dark')],['Dashboard','',showDashboard],['Toggle Zen Mode','',toggleZenMode]];
+window.openCommandPalette = function(){if(!requireRepo())return;const overlay=document.createElement('div');overlay.className='modal-overlay palette-overlay';overlay.id='command-modal';overlay.innerHTML='<div class="palette-modal"><input id="command-query" placeholder="Type a command..." autocomplete="off"><div id="command-results" class="palette-results"></div></div>';overlay.addEventListener('click',event=>{if(event.target===overlay)overlay.remove();});document.body.appendChild(overlay);const input=document.getElementById('command-query');const render=()=>{const commands=workbenchCommands.filter(([name])=>name.toLowerCase().includes(input.value.toLowerCase()));document.getElementById('command-results').innerHTML=commands.map(([name,shortcut])=>`<button class="palette-item" data-feature-command="${escapeHtml(name)}"><span>${escapeHtml(name)}</span><small>${shortcut}</small></button>`).join('');document.querySelectorAll('[data-feature-command]').forEach(button=>button.onclick=()=>{overlay.remove();workbenchCommands.find(command=>command[0]===button.dataset.featureCommand)?.[2]();});};input.addEventListener('input',render);input.addEventListener('keydown',event=>{if(event.key==='Enter')document.querySelector('#command-results .palette-item')?.click();});render();input.focus();};
+function mountWorkbenchSettings(){
+  if(navigator.userAgentData?.mobile||/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)){document.querySelector('.app').style.display='none';document.querySelector('.mobile-block').style.display='flex';}
+  const theme=localStorage.getItem('gitview-theme')||'system';document.documentElement.classList.toggle('theme-dark',theme==='dark'||(theme==='system'&&matchMedia('(prefers-color-scheme: dark)').matches));const accent=localStorage.getItem('gitview-accent');if(accent)setAccent(accent);
+  const handle=document.createElement('div');handle.className='sidebar-resize-handle';handle.title='Drag to resize sidebar';els.sidebar.appendChild(handle);handle.addEventListener('pointerdown',event=>{event.preventDefault();handle.setPointerCapture(event.pointerId);const move=pointer=>els.sidebar.style.width=`${Math.max(240,Math.min(500,pointer.clientX))}px`;const stop=()=>{handle.removeEventListener('pointermove',move);handle.removeEventListener('pointerup',stop);};handle.addEventListener('pointermove',move);handle.addEventListener('pointerup',stop);});
+  document.addEventListener('keydown',event=>{const mod=event.ctrlKey||event.metaKey;if(mod&&event.key.toLowerCase()==='k'){event.preventDefault();openCommandPalette();}else if(mod&&event.key.toLowerCase()==='p'){event.preventDefault();showGoToFile();}else if(mod&&event.shiftKey&&event.key.toLowerCase()==='f'){event.preventDefault();showCodeSearch();}else if(mod&&event.key.toLowerCase()==='s'&&featureState.editor){event.preventDefault();commitEditor();}else if(event.key==='Escape')closeAllModals();else if(event.altKey&&event.key==='ArrowLeft'){event.preventDefault();window.moveFolderHistory(-1);}else if(event.altKey&&event.key==='ArrowRight'){event.preventDefault();window.moveFolderHistory(1);}});
+}
+mountWorkbenchSettings();
+
 /* ===================== NAVIGATION ===================== */
-window.navigateTo = async function(path) {
+window.moveFolderHistory = function(offset) {
+  const next = state.pathHistoryIndex + offset;
+  if (next < 0 || next >= state.pathHistory.length) return;
+  state.pathHistoryIndex = next;
+  window.navigateTo(state.pathHistory[next], false);
+};
+
+window.navigateTo = async function(path, trackHistory = true) {
+  if (trackHistory && state.pathHistory[state.pathHistoryIndex] !== path) {
+    state.pathHistory = state.pathHistory.slice(0, state.pathHistoryIndex + 1);
+    state.pathHistory.push(path);
+    state.pathHistoryIndex = state.pathHistory.length - 1;
+  }
   state.currentPath = path;
   state.activeFile = null;
   els.fileFilter.value = '';
@@ -1271,11 +1766,35 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); els.fileFilter.focus(); }
 });
 
-if (state.token && state.user) {
-  updateAuthUI();
-  if (state.repos.length) { els.sidebar.style.display = 'flex'; els.mainEmpty.style.display = 'none'; }
-  else loadUserRepos();
-}
+(async function bootstrapGitHubAuth() {
+  try {
+    /* One-time migration for older builds that used sessionStorage. */
+    const legacyToken = sessionStorage.getItem('gh_token');
+    if (legacyToken) {
+      state.token = legacyToken;
+      await saveEncryptedToken(legacyToken);
+      sessionStorage.removeItem('gh_token');
+    } else {
+      state.token = await restoreEncryptedToken();
+    }
+
+    if (state.token && state.user) {
+      updateAuthUI();
+      if (state.repos.length) {
+        els.sidebar.style.display = 'flex';
+        els.mainEmpty.style.display = 'none';
+      } else {
+        await loadUserRepos();
+      }
+    }
+  } catch (e) {
+    console.warn('GitView auth bootstrap failed:', e);
+    state.token = null;
+    state.user = null;
+    sessionStorage.removeItem('gh_user');
+    updateAuthUI();
+  }
+})();
 </script>
 </body>
 </html>
